@@ -2,10 +2,15 @@ package com.flipkart.newsapp;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.flipkart.newsapp.adapters.ViewPagerAdapter;
 import com.flipkart.newsapp.views.SlidingTabLayout;
@@ -19,7 +24,8 @@ public class MainActivity extends ActionBarActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
 
 
     @Override
@@ -33,7 +39,20 @@ public class MainActivity extends ActionBarActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         if (toolbar != null) {
             toolbar.setTitle(R.string.app_name);
+            toolbar.setNavigationIcon(R.drawable.ic_drawer);
             setSupportActionBar(toolbar);
+
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+                        mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    } else {
+                        mDrawerLayout.openDrawer(Gravity.LEFT);
+                    }
+
+                }
+            });
         }
 
 
@@ -62,6 +81,13 @@ public class MainActivity extends ActionBarActivity {
         tabs.setViewPager(pager);
 
 
+
+        String[] mItems = getResources().getStringArray(R.array.items);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+          mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        // Set the adapter for the list view
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, R.id.menu_items, mItems));
 
     }
 

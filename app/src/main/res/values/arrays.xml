@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="items">
+        <item>Top News</item>
+        <item>Popular News</item>
+    </string-array>
+</resources>
