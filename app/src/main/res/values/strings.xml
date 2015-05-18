@@ -6,4 +6,5 @@
     <string name="article">Article</string>
     <string name="image">Image</string>
     <string name="video">Videos</string>
+    <string name="navigation_icon_desc">open close navigation</string>
 </resources>

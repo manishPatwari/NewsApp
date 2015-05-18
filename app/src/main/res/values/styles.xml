@@ -3,4 +3,7 @@
         <item name="colorPrimary">@color/ColorPrimary</item>
         <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
     </style>
+    <style name="drawerItems" parent="@android:style/TextAppearance.Medium">
+
+    </style>
 </resources>

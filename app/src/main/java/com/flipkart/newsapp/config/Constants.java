@@ -5,6 +5,9 @@ package com.flipkart.newsapp.config;
  */
 public class Constants {
 
+    public Constants(){
+
+    }
     public static enum NewsType{
         LIST("list"), VIDEOS("videos"),GALLERY("gallery") ;
 
@@ -20,12 +23,12 @@ public class Constants {
         }
     }
 
-    public static enum Category{
-        ALL("all"), TOP_NEWS("top news"),INDIA("india"),WORLD("world"),TECH("tech") ;
+    public static enum IntentActionType{
+        CATEGORY_CHANGE("all");
 
         private final String category;
 
-        private Category(String category){
+        private IntentActionType(String category){
             this.category = category;
         }
 
@@ -35,4 +38,18 @@ public class Constants {
         }
     }
 
+    public static enum IntentExtraKey{
+        CATEGORY("category");
+
+        private final String category;
+
+        private IntentExtraKey(String category){
+            this.category = category;
+        }
+
+        @Override
+        public String toString(){
+            return category;
+        }
+    }
 }

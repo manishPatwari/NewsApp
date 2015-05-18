@@ -2,6 +2,9 @@
 <resources>
     <string-array name="items">
         <item>Top News</item>
-        <item>Popular News</item>
+        <item>India</item>
+        <item>World</item>
+        <item>Tech</item>
+        <item>Sports</item>
     </string-array>
 </resources>
