@@ -57,9 +57,7 @@ public class Comments extends LinearLayout {
                 (Context.LAYOUT_INFLATER_SERVICE);
         View mCommentLayout = inflater.inflate(R.layout.comment_layout,this);
 
-        //addView(mCommentLayout);
-
-        mCommentText = (EditText) mCommentLayout.findViewById(R.id.comment_text);
+            mCommentText = (EditText) mCommentLayout.findViewById(R.id.comment_text);
         mPostBtn = (Button) mCommentLayout.findViewById(R.id.comment_post_btn);
         mCommentList = (ListView) mCommentLayout.findViewById(R.id.comment_list);
 
@@ -83,7 +81,7 @@ public class Comments extends LinearLayout {
             }
         });
 
-        mCommentList.setOnTouchListener(new OnTouchListener() {
+        /*mCommentList.setOnTouchListener(new OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -91,7 +89,7 @@ public class Comments extends LinearLayout {
                 v.getParent().requestDisallowInterceptTouchEvent(true);
                 return false;
             }
-        });
+        });*/
     }
 
 

@@ -1,12 +1,14 @@
 package com.flipkart.newsapp.fragments;
 
 import android.app.Activity;
-import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import com.flipkart.newsapp.GalleryActivity;
 import com.flipkart.newsapp.R;
 import com.flipkart.newsapp.adapters.ImageListAdapter;
 import com.flipkart.newsapp.config.AppPreferences;
+import com.flipkart.newsapp.config.Constants;
 import com.flipkart.newsapp.listener.EndlessListScrollListener;
 import com.flipkart.newsapp.model.FlickrResponse;
 import com.flipkart.newsapp.model.JsonPhotoDataProvider;
@@ -60,7 +63,7 @@ public class ImageFragment extends Fragment {
     private String mJsonResponse;
     FlickrResponse mFlickrRespons;
     private static String TAG = "FLICKR";
-    private static String FLICKR_API_URL;
+    private  String FLICKR_API_URL;
     Context mContext;
     ProgressBar mProgressBar;
     private int totalNumberOfItems;
@@ -81,6 +84,22 @@ public class ImageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String searchKeyWord = intent.getStringExtra(Constants.IntentExtraKey.CATEGORY.toString());
+                Log.i("Drawer_Click", searchKeyWord);
+
+                try {
+                    loadImageFeed(FLICKR_API_URL + "&text="+ URLEncoder.encode(searchKeyWord, "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.IntentActionType.CATEGORY_CHANGE.toString());
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(receiver, filter);
 
     }
 
@@ -101,13 +120,13 @@ public class ImageFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.d(TAG,"onRefresh Called");
+                Log.d(TAG, "onRefresh Called");
                 mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
             }
         });
         mGsonBuilderHelper = new GSONBuilderHelper();
         FLICKR_API_URL = AppPreferences.FLICKR_API_URL;
-        Intent intent = mActivity.getIntent();
+        /*Intent intent = mActivity.getIntent();
         FLICKR_API_URL = FLICKR_API_URL + "&text=car";
 
         if (intent != null) {
@@ -117,8 +136,9 @@ public class ImageFragment extends Fragment {
                 if (searchString != null)
                     FLICKR_API_URL = FLICKR_API_URL + "&text=" + URLEncoder.encode(searchString);
             }
-        }
-        mNetworkRequestQueue = NetworkRequestQueue.getInstance();
+        }*/
+        loadImageFeed(FLICKR_API_URL + "&text=car");
+        /*mNetworkRequestQueue = NetworkRequestQueue.getInstance();
         mNetworkRequestQueue.initialize(mContext);
         mRequestQueue = mNetworkRequestQueue.getRequestQueue();
         mImageLoader = mNetworkRequestQueue.getImageLoader();
@@ -159,7 +179,7 @@ public class ImageFragment extends Fragment {
                 }
 
             }
-        });
+        });*/
 
 
         mImageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -179,6 +199,51 @@ public class ImageFragment extends Fragment {
 
 
         return view;
+    }
+
+    void loadImageFeed(final String apiUrl) {
+        mNetworkRequestQueue = NetworkRequestQueue.getInstance();
+        mNetworkRequestQueue.initialize(mContext);
+        mRequestQueue = mNetworkRequestQueue.getRequestQueue();
+        mImageLoader = mNetworkRequestQueue.getImageLoader();
+
+        HttpsTrustManager.allowAllSSL();
+
+        mNetworkRequestQueue.makeStringRequest(apiUrl);
+        mNetworkRequestQueue.setmVolleyStringResponseListener(new NetworkRequestQueue.VolleyStringResponseListener() {
+            @Override
+            public void onVolleyResponse(String response) {
+                FlickrResponse flickrResponse = mGsonBuilderHelper.getJsonFromString(response, FlickrResponse.class);
+                mFlickrRespons = flickrResponse;
+                mJsonResponse = response;
+                mImageResponse.setFlickrResponse(flickrResponse);
+                Log.d(TAG, flickrResponse + "");
+                initListViewAdapter(mContext,apiUrl);
+            }
+
+            @Override
+            public void onVolleyErrorResponse(VolleyError volleyError) {
+                Log.d(TAG, "Error Occurred :" + volleyError);
+                Cache.Entry entry = mRequestQueue.getCache().get(apiUrl);
+                if (entry != null) {
+                    try {
+                        String data = new String(entry.data, "UTF-8");
+                        System.out.println(" Reading from Cache Data");
+                        Log.d(TAG, "Reading from Cache Data");
+                        FlickrResponse flickrResponse = mGsonBuilderHelper.getJsonFromString(data, FlickrResponse.class);
+                        mFlickrRespons = flickrResponse;
+                        mJsonResponse = data;
+                        mImageResponse.setFlickrResponse(flickrResponse);
+                        initListViewAdapter(mContext,apiUrl);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Log.d(TAG, "Cache Data is NULL");
+                }
+
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -225,16 +290,16 @@ public class ImageFragment extends Fragment {
     }
 
 
-    public void initListViewAdapter(Context context) {
+    public void initListViewAdapter(Context context, final String apiUrl) {
         Log.d(TAG, "Init ListView Adapter...");
         mImageListAdapter = new ImageListAdapter(context, mFlickrRespons);
         mImageListView.setAdapter(mImageListAdapter);
         mImageListView.setOnScrollListener(new EndlessListScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                Log.d(TAG, "Loading more data... page = "+ page);
-                loadNextPageData(page);
-                this.isLoading=false;
+                Log.d(TAG, "Loading more data... page = " + page);
+                loadNextPageData(page, apiUrl);
+                this.isLoading = false;
             }
         });
         totalNumberOfItems = mImageListView.getCount();
@@ -248,8 +313,8 @@ public class ImageFragment extends Fragment {
 
     }
 
-    private void loadNextPageData(int page) {
-        mNetworkRequestQueue.makeStringRequest(FLICKR_API_URL + "&text=car&page="+page);
+    private void loadNextPageData(int page, String apiUrl) {
+        mNetworkRequestQueue.makeStringRequest(apiUrl+"&page=" + page);
         mNetworkRequestQueue.setmVolleyStringResponseListener(new NetworkRequestQueue.VolleyStringResponseListener() {
             @Override
             public void onVolleyResponse(String response) {
