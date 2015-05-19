@@ -1,5 +1,6 @@
 package com.flipkart.newsapp;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -8,10 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.flipkart.newsapp.adapters.ViewPagerAdapter;
+import com.flipkart.newsapp.fragments.ArticleFragment;
 import com.flipkart.newsapp.views.SlidingTabLayout;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity  {
+    //implements ArticleFragment.OnFragmentInteractionListener
 
     // Declaring Your View and Variables
 
@@ -87,4 +90,9 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+/*
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }*/
 }
