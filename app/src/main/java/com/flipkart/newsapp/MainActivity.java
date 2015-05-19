@@ -1,5 +1,6 @@
 package com.flipkart.newsapp;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -8,10 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.flipkart.newsapp.adapters.ViewPagerAdapter;
+import com.flipkart.newsapp.fragments.ImageFragment;
 import com.flipkart.newsapp.views.SlidingTabLayout;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity  implements ImageFragment.OnFragmentInteractionListener{
 
     // Declaring Your View and Variables
 
@@ -27,7 +29,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CharSequence Titles[] = {getResources().getString(R.string.image), getResources().getString(R.string.article) , getResources().getString(R.string.video)};
+        CharSequence Titles[] = {getResources().getString(R.string.article),getResources().getString(R.string.image) , getResources().getString(R.string.video)};
         // Creating The Toolbar and setting it as the Toolbar for the activity
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -70,6 +72,8 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+        item.setVisible(false);
         return true;
     }
 
@@ -86,5 +90,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
