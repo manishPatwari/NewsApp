@@ -6,4 +6,10 @@
     <style name="drawerItems" parent="@android:style/TextAppearance.Medium">
 
     </style>
+
+    <style name="DemoButton">
+                <item name="android:layout_width">wrap_content</item>
+                <item name="android:layout_height">wrap_content</item>
+                <item name="android:minWidth">40dp</item>
+            </style>
 </resources>

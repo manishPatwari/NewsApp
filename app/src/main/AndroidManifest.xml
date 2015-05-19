@@ -18,6 +18,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+                   android:name=".PlayerActivity"
+                    android:screenOrientation="portrait"
+                    android:label="@string/video" />
+
+                <activity
+                   android:name=".VideoGalleryActivity"
+                    android:screenOrientation="portrait"
+                    android:label="@string/video" />
     </application>
 
 </manifest>

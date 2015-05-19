@@ -1,5 +1,6 @@
 package com.flipkart.newsapp.network.request.common;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.android.volley.Request;
@@ -11,11 +12,11 @@ import com.flipkart.newsapp.utils.LruBitmapCache;
 /**
  * Created by manish.patwari on 5/10/15.
  */
-public class NetworkRequestQueue {
+public class NetworkRequestQueue extends Application {
 
     private RequestQueue mRequestQueue;
     private static NetworkRequestQueue instance;
-    private NetworkRequestQueue(){};
+    public NetworkRequestQueue(){};
     private ImageLoader mImageLoader;
 
     public static NetworkRequestQueue getInstance(){
