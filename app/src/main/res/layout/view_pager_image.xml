@@ -1,52 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#ffe5ecf4"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="fill_parent">
 
-    <!--android:background="#9DA3A4"
-            android:background="#ffe5ecf4"
--->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:background="#ffe5ecf4"
+        android:orientation="vertical">
 
-    <!--
-        <View style="@style/Divider" />
+        <!--android:background="#9DA3A4"
+                android:background="#ffe5ecf4"
     -->
 
-  <!--  <include
-        android:id="@+id/tool_bar"
-        layout="@layout/tool_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
--->
-<!--
-    <View style="@style/Divider" />
--->
+        <!--
+            <View style="@style/Divider" />
+        -->
 
-    <TextView
-        android:id="@+id/title_text_view"
-        android:layout_width="match_parent"
-        android:background="@drawable/round_layout"
+        <!--  <include
+              android:id="@+id/tool_bar"
+              layout="@layout/tool_bar"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" />
+      -->
+        <!--
+            <View style="@style/Divider" />
+        -->
 
-        android:layout_height="50dp"
-        android:layout_marginTop="43dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_below="@+id/tool_bar"
-        android:gravity="center"
-        android:text="Title of Image..." />
+        <TextView
+            android:id="@+id/title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:layout_below="@+id/tool_bar"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="43dp"
+            android:background="@drawable/round_layout"
+            android:gravity="center"
+            android:text="Title of Image..." />
 
 
-    <com.android.volley.toolbox.NetworkImageView
-        android:id="@+id/gallery_image_view"
-        android:layout_width="match_parent"
-        android:background="@drawable/round_layout"
-        android:src="@android:drawable/divider_horizontal_dark"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/title_text_view" />
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/gallery_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_below="@+id/title_text_view"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/round_layout"
+            android:src="@android:drawable/divider_horizontal_dark" />
 
-</RelativeLayout>
+        <com.flipkart.newsapp.views.Comments
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/gallery_image_view">
+
+        </com.flipkart.newsapp.views.Comments>
+
+    </RelativeLayout>
+</ScrollView>
