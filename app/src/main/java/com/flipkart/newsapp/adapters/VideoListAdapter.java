@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.flipkart.newsapp.R;
 import com.flipkart.newsapp.model.VideosItem;
 import com.flipkart.newsapp.network.request.common.NetworkRequestQueue;
+import com.flipkart.newsapp.utils.ListAnimationUtils;
 
 import java.util.ArrayList;
 
@@ -23,10 +25,13 @@ public class VideoListAdapter extends BaseAdapter {
 
     private ArrayList<VideosItem> videoList;
     private LayoutInflater layoutInflater;
-    ImageLoader mImageLoader;
+    private ImageLoader mImageLoader;
+    private int lastPosition = -1;
+    private Context mContext;
 
 
     public VideoListAdapter(Context aContext, ArrayList<VideosItem> videoList) {
+        mContext=aContext;
         this.videoList = videoList;
         layoutInflater = LayoutInflater.from(aContext);
         mImageLoader =  NetworkRequestQueue.getInstance().getImageLoader();
@@ -67,6 +72,20 @@ public class VideoListAdapter extends BaseAdapter {
         holder.dateView.setText(videoList.get(position).getDate());
 
         mImageLoader.get(videoList.get(position).getThumbnailUrl(), ImageLoader.getImageListener(holder.imageView, R.mipmap.ic_launcher, R.mipmap.ic_launcher));
+
+        //            Animation logic
+        int tempPosition = position;
+        ListAnimationUtils listAnimationUtils = new ListAnimationUtils(mContext);
+        Animation animation;
+        if(tempPosition>lastPosition){
+            animation=listAnimationUtils.animateUpFromBottom();
+        }else{
+            animation=listAnimationUtils.animateDownFromTop();
+        }
+
+        lastPosition = tempPosition;
+        convertView.startAnimation(animation);
+        animation.setDuration(430);
         return convertView;
     }
 
