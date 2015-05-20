@@ -101,6 +101,7 @@ public class ImageFragment extends Fragment {
         filter.addAction(Constants.IntentActionType.CATEGORY_CHANGE.toString());
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(receiver, filter);
 
+
     }
 
     @Override
