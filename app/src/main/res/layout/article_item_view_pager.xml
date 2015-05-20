@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+>
+<!--    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:id="@+id/progress"
+        android:layout_centerVertical="true"
+        android:padding="2dp"/>-->
+    <WebView
+
+        android:id="@+id/main_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/progressBar"></WebView>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:max="100"
+        android:minHeight="30dp"
+        android:minWidth="200dp"
+        android:progress="1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+   <!-- <ProgressBar
+        android:id="@+id/progressBar"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        style="?indeterminateProgressStyle"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />-->
+
+  <!--  <TextView
+  android:layout_marginTop="3dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Title"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="#E8F1F2"
+        android:background="#002B30"
+        android:id="@+id/titleView"
+        android:gravity="center_horizontal"
+        />
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="10dp"
+        android:id="@+id/imageView"
+        android:layout_below="@+id/titleView"
+        />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:id="@+id/descView"
+        android:textSize="15dp"
+        android:layout_margin="10dp"
+        android:background="#9DA2AB"
+        android:layout_below="@+id/imageView"
+        />-->
+</RelativeLayout>

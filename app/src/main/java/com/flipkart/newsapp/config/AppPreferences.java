@@ -13,7 +13,7 @@ public class AppPreferences {
     private static final String PACKAGE_NAME = "com.flipkart.newsapp";
 
     // Google Console APIs developer key
-    public static final String YOUTUBE_DEVELOPER_KEY = "AIzaSyCwOnp5WDS9OD8P5zHoqynm0t8cbkT-GDo";
+    public static final String YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=AIzaSyAy_mjrGdkTjmBumgnKdqsvWGi-fE8vVkQ&q=";
 
     private static AppPreferences instance;
     private SharedPreferences sharedPreferences;
