@@ -15,14 +15,16 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.flipkart.newsapp.ArticleNewsListener.AdapterListener;
 import com.flipkart.newsapp.R;
+import com.flipkart.newsapp.controller.ArticleNewsController;
 import com.flipkart.newsapp.model.ResponseData;
 import com.flipkart.newsapp.network.request.common.NetworkRequestQueue;
 
 /**
  * Created by ashokkumar.y on 15/05/15.
  */
-public class ArticleNewsDetailAdapter  extends PagerAdapter{
+public class ArticleNewsDetailAdapter  extends PagerAdapter implements AdapterListener{
 
     private static final String TAG = "ARTICLE";
     Context mContext;
@@ -31,17 +33,20 @@ public class ArticleNewsDetailAdapter  extends PagerAdapter{
    // NetworkRequestQueue mQueue;
     LayoutInflater mLayoutInflater;
     WebView mWebView;
+    ArticleNewsController articleNewsController;
 
    ProgressBar progressBar;
    //constructor
-   public ArticleNewsDetailAdapter(Context context,ResponseData response,int position){
+   public ArticleNewsDetailAdapter(Context context,int position){
        this.mContext=context;
-       this.mResponse=response;
+       articleNewsController= ArticleNewsController.getInstance();
+       this.mResponse=articleNewsController.getInstance().getResponseObject();
       // mQueue = NetworkRequestQueue.getInstance();
       // mQueue.initialize(context);
        //mImageLoader=mQueue.getImageLoader();
        mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+      // mResponse.registerDataSourceListener
+       articleNewsController.registerDataSourceListener(ArticleNewsDetailAdapter.this);
    }
     @Override
     public int getCount() {
@@ -56,12 +61,14 @@ public class ArticleNewsDetailAdapter  extends PagerAdapter{
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.article_item_view_pager, container, false);
         mWebView=(WebView)itemView.findViewById(R.id.main_webview);
-      progressBar=(ProgressBar)itemView.findViewById(R.id.progressBar);
+       // progressBar=(ProgressBar)itemView.findViewById(R.id.progressBar);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         mWebView.loadUrl(mResponse.getNewsData().get(position).getContentUrl());
+        //progressBar.setProgress(100);
+        mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebViewClient(new WebViewClient());
-        /*mWebView.setWebViewClient(new WebViewClient(){
+/*        mWebView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                // return super.shouldOverrideUrlLoading(view, url);
@@ -73,6 +80,7 @@ public class ArticleNewsDetailAdapter  extends PagerAdapter{
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 Log.d(TAG,"onPageStarted");
+                progressBar.setProgress(View.VISIBLE);
             }
 
             @Override
@@ -80,20 +88,22 @@ public class ArticleNewsDetailAdapter  extends PagerAdapter{
                 super.onPageFinished(view, url);
                 Log.i(TAG, "onPageFinished");
                 progressBar.setVisibility(View.GONE);
-                progressBar.setProgress(100);
+
             }
-        });*/
-        mWebView.setWebChromeClient(new WebChromeClient(){
+        });
+
+       mWebView.setWebChromeClient(new WebChromeClient(){
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
+                progressBar.setProgress(View.VISIBLE);
                 progressBar.setProgress(newProgress);
                 if(newProgress==100){
                     progressBar.setVisibility(ProgressBar.GONE);
                 }
             }
-        } );
+        } );*/
         container.addView(itemView);
         return itemView;
     }
@@ -103,4 +113,8 @@ public class ArticleNewsDetailAdapter  extends PagerAdapter{
         container.removeView((RelativeLayout) object);
     }
 
+    @Override
+    public void notifyListener() {
+        this.notifyDataSetChanged();
+    }
 }

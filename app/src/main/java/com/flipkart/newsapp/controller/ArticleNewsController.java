@@ -1,5 +1,6 @@
-package com.flipkart.newsapp.controllers.ArticleNewsController;
+package com.flipkart.newsapp.controller;
 
+import com.flipkart.newsapp.ArticleNewsListener.AdapterListener;
 import com.flipkart.newsapp.adapters.ArticleNewsAdapter;
 import com.flipkart.newsapp.fragments.ArticleFragment;
 import com.flipkart.newsapp.model.ResponseData;
@@ -8,8 +9,6 @@ import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 /**
  * Created by ashokkumar.y on 18/05/15.
  */
@@ -17,6 +16,7 @@ public class ArticleNewsController {
    public   ResponseData responseObject;
     ArticleNewsAdapter articleNewsAdapter;
     ArticleFragment articleFragment;
+    private AdapterListener baseAdapterListener;
     private static ArticleNewsController instance;
 
     private ArticleNewsController(){}
@@ -33,6 +33,9 @@ public class ArticleNewsController {
     }
 
    //private ArrayList<ResponseData> mResponseObject= new ArrayList<ResponseData>();
+   public void registerDataSourceListener(AdapterListener adapterListener){
+       this.baseAdapterListener = adapterListener;
+   }
 
  public void  processResponse(JSONObject response){
      //System.out.println("inside controller");
@@ -57,6 +60,9 @@ public class ArticleNewsController {
         Gson gson = gsonBuilder.create();
         responseToUpdate = gson.fromJson(responseStringData, ResponseData.class);
         responseObject.getNewsData().addAll(responseToUpdate.getNewsData());
+        if(baseAdapterListener !=null){
+            baseAdapterListener.notifyListener();
+        }
     }
 
 }
