@@ -37,7 +37,6 @@ public class VideoRequest {
 
         //clear the video_list to update with new content
         VideoNewsController.getInstance().clearVideoList();
-        videoAdapter.notifyDataSetChanged();
 
         JsonObjectRequest videoReq = new JsonObjectRequest(youtube_url,null,
                 new Response.Listener<JSONObject>() {
@@ -45,7 +44,7 @@ public class VideoRequest {
                     public void onResponse(JSONObject response) {
                         video_list.addAll(VideoNewsController.getInstance().processVideoItem(response)) ;
 
-                        VideoNewsController.getInstance().setVideosItems(video_list);
+
 
                         // notifying list adapter about data changes,so that it renders the list view with updated data
                         videoAdapter.notifyDataSetChanged();
