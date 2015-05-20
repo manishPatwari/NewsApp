@@ -35,7 +35,6 @@ public class ArticleNewsDetailAdapter  extends PagerAdapter implements AdapterLi
     WebView mWebView;
     ArticleNewsController articleNewsController;
 
-   ProgressBar progressBar;
    //constructor
    public ArticleNewsDetailAdapter(Context context,int position){
        this.mContext=context;
@@ -60,39 +59,38 @@ public class ArticleNewsDetailAdapter  extends PagerAdapter implements AdapterLi
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.article_item_view_pager, container, false);
+        ProgressBar progressBar = (ProgressBar) itemView.findViewById(R.id.articleProgressBar);
+
         mWebView=(WebView)itemView.findViewById(R.id.main_webview);
-       // progressBar=(ProgressBar)itemView.findViewById(R.id.progressBar);
+
+        mWebView.setTag(progressBar);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         mWebView.loadUrl(mResponse.getNewsData().get(position).getContentUrl());
         //progressBar.setProgress(100);
         mWebView.setWebChromeClient(new WebChromeClient());
-        mWebView.setWebViewClient(new WebViewClient());
-/*        mWebView.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-               // return super.shouldOverrideUrlLoading(view, url);
-                view.loadUrl(url);
-                return true;
-            }
+       // mWebView.setWebViewClient(new WebViewClient());
+     mWebView.setWebViewClient(new WebViewClient(){
+
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 Log.d(TAG,"onPageStarted");
-                progressBar.setProgress(View.VISIBLE);
+               // progressBar.setProgress(0);
+                ((View)view.getTag()).setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 Log.i(TAG, "onPageFinished");
-                progressBar.setVisibility(View.GONE);
+                ((View)view.getTag()).setVisibility(View.GONE);
 
             }
         });
 
-       mWebView.setWebChromeClient(new WebChromeClient(){
+      /* mWebView.setWebChromeClient(new WebChromeClient(){
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
