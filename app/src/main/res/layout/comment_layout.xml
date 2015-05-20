@@ -13,7 +13,6 @@
         android:hint="Comment"
         android:id="@+id/comment_text"
         android:maxLines="3"
-        android:focusable="false"
         android:inputType="textMultiLine"/>
     <Button
         android:layout_width="0dp"
