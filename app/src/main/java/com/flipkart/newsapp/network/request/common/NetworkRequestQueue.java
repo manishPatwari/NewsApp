@@ -24,11 +24,15 @@ public class NetworkRequestQueue {
     private VolleyStringResponseListener mVolleyStringResponseListener;
     private RequestQueue mRequestQueue;
     private static NetworkRequestQueue instance;
-    private NetworkRequestQueue(){};
+
+    private NetworkRequestQueue() {
+    }
+
+    ;
     private ImageLoader mImageLoader;
     private Context mContext;
 
-    public static NetworkRequestQueue getInstance(){
+    public static NetworkRequestQueue getInstance() {
         if (instance == null) {
             synchronized (NetworkRequestQueue.class) {
                 if (instance == null) {
@@ -43,19 +47,19 @@ public class NetworkRequestQueue {
     // not an Activity context.
     // This ensures that the RequestQueue will last for the lifetime of your app,
     // instead of being recreated every time the activity is recreated.
-    public NetworkRequestQueue initialize(Context context){
+    public NetworkRequestQueue initialize(Context context) {
 
         // Instantiate the cache
-       // Cache cache = new DiskBasedCache(mContext.getCacheDir(), 1024 * 1024); // 1MB cap
+        // Cache cache = new DiskBasedCache(mContext.getCacheDir(), 1024 * 1024); // 1MB cap
 
         // Set up the network to use HttpURLConnection as the HTTP client.
-       // BasicNetwork network = new BasicNetwork(new HurlStack());
+        // BasicNetwork network = new BasicNetwork(new HurlStack());
 
-          // Instantiate the RequestQueue with the cache and network.
-       // mRequestQueue = new RequestQueue(cache, network);
+        // Instantiate the RequestQueue with the cache and network.
+        // mRequestQueue = new RequestQueue(cache, network);
         mContext = context;
-        mRequestQueue =  Volley.newRequestQueue(mContext); // 1MB cap
-         // Start the queue
+        mRequestQueue = Volley.newRequestQueue(mContext); // 1MB cap
+        // Start the queue
         mRequestQueue.start();
 
         mImageLoader = new ImageLoader(mRequestQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(mContext.getApplicationContext())));
@@ -63,24 +67,25 @@ public class NetworkRequestQueue {
         return instance;
     }
 
-    public void setVolleyJsonObjectResponseListener(VolleyJsonObjectResponseListener volleyJsonObjectResponseListener){
+    public void setVolleyJsonObjectResponseListener(VolleyJsonObjectResponseListener volleyJsonObjectResponseListener) {
         mVolleyJsonObjectResponseListener = volleyJsonObjectResponseListener;
 
     }
-    public void setmVolleyStringResponseListener(VolleyStringResponseListener volleyStringResponseListener){
+
+    public void setVolleyStringResponseListener(VolleyStringResponseListener volleyStringResponseListener) {
         mVolleyStringResponseListener = volleyStringResponseListener;
     }
-    public RequestQueue getRequestQueue(){
+
+    public RequestQueue getRequestQueue() {
         return mRequestQueue;
     }
 
-   public ImageLoader getImageLoader()
-   {
-       return mImageLoader;
-   }
+    public ImageLoader getImageLoader() {
+        return mImageLoader;
+    }
 
-    public void makeJsonObjectRequest(String url){
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url+"&page=2", null,
+    public void makeJsonObjectRequest(String url) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url + "&page=2", null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -96,7 +101,7 @@ public class NetworkRequestQueue {
         mRequestQueue.add(jsonObjectRequest);
     }
 
-    public void makeStringRequest(String url){
+    public void makeStringRequest(String url) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -113,21 +118,17 @@ public class NetworkRequestQueue {
     }
 
 
-
-
-
     // Add the request to the RequestQueue.
     public <T> void addToRequestQueue(Request<T> req) {
         mRequestQueue.add(req);
     }
 
 
-    public void cancelAllRequest(String tag)
-    {
+    public void cancelAllRequest(String tag) {
         mRequestQueue.cancelAll(tag);
     }
 
-    public void destroy(){
+    public void destroy() {
         mRequestQueue.stop();
         mRequestQueue = null;
         instance = null;
@@ -135,13 +136,15 @@ public class NetworkRequestQueue {
         mImageLoader = null;
     }
 
-    public interface VolleyJsonObjectResponseListener{
-         void onVolleyResponse(JSONObject jsonObject);
-         void onVolleyErrorResponse(VolleyError volleyError);
+    public interface VolleyJsonObjectResponseListener {
+        void onVolleyResponse(JSONObject jsonObject);
+
+        void onVolleyErrorResponse(VolleyError volleyError);
     }
 
-    public interface VolleyStringResponseListener{
+    public interface VolleyStringResponseListener {
         void onVolleyResponse(String response);
+
         void onVolleyErrorResponse(VolleyError volleyError);
     }
 }

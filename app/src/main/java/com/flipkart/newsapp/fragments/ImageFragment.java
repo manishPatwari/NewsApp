@@ -63,7 +63,7 @@ public class ImageFragment extends Fragment {
     private String mJsonResponse;
     FlickrResponse mFlickrRespons;
     private static String TAG = "FLICKR";
-    private  String FLICKR_API_URL;
+    private String FLICKR_API_URL;
     Context mContext;
     ProgressBar mProgressBar;
     private int totalNumberOfItems;
@@ -91,7 +91,7 @@ public class ImageFragment extends Fragment {
                 Log.i("Drawer_Click", searchKeyWord);
 
                 try {
-                    loadImageFeed(FLICKR_API_URL + "&text="+ URLEncoder.encode(searchKeyWord, "UTF-8"));
+                    loadImageFeed(FLICKR_API_URL + "&text=" + URLEncoder.encode(searchKeyWord, "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -126,61 +126,7 @@ public class ImageFragment extends Fragment {
         });
         mGsonBuilderHelper = new GSONBuilderHelper();
         FLICKR_API_URL = AppPreferences.FLICKR_API_URL;
-        /*Intent intent = mActivity.getIntent();
-        FLICKR_API_URL = FLICKR_API_URL + "&text=car";
-
-        if (intent != null) {
-            Log.d(TAG, intent.toString());
-            if (null != intent.getExtras()) {
-                String searchString = intent.getStringExtra(SearchManager.QUERY);
-                if (searchString != null)
-                    FLICKR_API_URL = FLICKR_API_URL + "&text=" + URLEncoder.encode(searchString);
-            }
-        }*/
         loadImageFeed(FLICKR_API_URL + "&text=car");
-        /*mNetworkRequestQueue = NetworkRequestQueue.getInstance();
-        mNetworkRequestQueue.initialize(mContext);
-        mRequestQueue = mNetworkRequestQueue.getRequestQueue();
-        mImageLoader = mNetworkRequestQueue.getImageLoader();
-
-        HttpsTrustManager.allowAllSSL();
-
-        mNetworkRequestQueue.makeStringRequest(FLICKR_API_URL + "&text=car");
-        mNetworkRequestQueue.setmVolleyStringResponseListener(new NetworkRequestQueue.VolleyStringResponseListener() {
-            @Override
-            public void onVolleyResponse(String response) {
-                FlickrResponse flickrResponse = mGsonBuilderHelper.getJsonFromString(response, FlickrResponse.class);
-                mFlickrRespons = flickrResponse;
-                mJsonResponse = response;
-                mImageResponse.setFlickrResponse(flickrResponse);
-                Log.d(TAG, flickrResponse + "");
-                initListViewAdapter(mContext);
-            }
-
-            @Override
-            public void onVolleyErrorResponse(VolleyError volleyError) {
-                Log.d(TAG, "Error Occurred :" + volleyError);
-                Cache.Entry entry = mRequestQueue.getCache().get(FLICKR_API_URL + "&text=car");
-                if (entry != null) {
-                    try {
-                        String data = new String(entry.data, "UTF-8");
-                        System.out.println(" Reading from Cache Data");
-                        Log.d(TAG, "Reading from Cache Data");
-                        FlickrResponse flickrResponse = mGsonBuilderHelper.getJsonFromString(data, FlickrResponse.class);
-                        mFlickrRespons = flickrResponse;
-                        mJsonResponse = data;
-                        mImageResponse.setFlickrResponse(flickrResponse);
-                        initListViewAdapter(mContext);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Log.d(TAG, "Cache Data is NULL");
-                }
-
-            }
-        });*/
-
 
         mImageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -197,7 +143,6 @@ public class ImageFragment extends Fragment {
             }
         });
 
-
         return view;
     }
 
@@ -210,7 +155,10 @@ public class ImageFragment extends Fragment {
         HttpsTrustManager.allowAllSSL();
 
         mNetworkRequestQueue.makeStringRequest(apiUrl);
-        mNetworkRequestQueue.setmVolleyStringResponseListener(new NetworkRequestQueue.VolleyStringResponseListener() {
+        mSwipeRefreshLayout.setEnabled(true);
+        mSwipeRefreshLayout.setRefreshing(true);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        mNetworkRequestQueue.setVolleyStringResponseListener(new NetworkRequestQueue.VolleyStringResponseListener() {
             @Override
             public void onVolleyResponse(String response) {
                 FlickrResponse flickrResponse = mGsonBuilderHelper.getJsonFromString(response, FlickrResponse.class);
@@ -218,7 +166,7 @@ public class ImageFragment extends Fragment {
                 mJsonResponse = response;
                 mImageResponse.setFlickrResponse(flickrResponse);
                 Log.d(TAG, flickrResponse + "");
-                initListViewAdapter(mContext,apiUrl);
+                initListViewAdapter(mContext, apiUrl);
             }
 
             @Override
@@ -234,7 +182,7 @@ public class ImageFragment extends Fragment {
                         mFlickrRespons = flickrResponse;
                         mJsonResponse = data;
                         mImageResponse.setFlickrResponse(flickrResponse);
-                        initListViewAdapter(mContext,apiUrl);
+                        initListViewAdapter(mContext, apiUrl);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
@@ -293,6 +241,7 @@ public class ImageFragment extends Fragment {
     public void initListViewAdapter(Context context, final String apiUrl) {
         Log.d(TAG, "Init ListView Adapter...");
         mImageListAdapter = new ImageListAdapter(context, mFlickrRespons);
+        mImageResponse.registerUpdateDataSourceListener(mImageListAdapter);
         mImageListView.setAdapter(mImageListAdapter);
         mImageListView.setOnScrollListener(new EndlessListScrollListener() {
             @Override
@@ -314,8 +263,15 @@ public class ImageFragment extends Fragment {
     }
 
     private void loadNextPageData(int page, String apiUrl) {
-        mNetworkRequestQueue.makeStringRequest(apiUrl+"&page=" + page);
-        mNetworkRequestQueue.setmVolleyStringResponseListener(new NetworkRequestQueue.VolleyStringResponseListener() {
+        mSwipeRefreshLayout.setEnabled(true);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        /*mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);*/
+        mSwipeRefreshLayout.setRefreshing(true);
+        mNetworkRequestQueue.makeStringRequest(apiUrl + "&page=" + page);
+        mNetworkRequestQueue.setVolleyStringResponseListener(new NetworkRequestQueue.VolleyStringResponseListener() {
             @Override
             public void onVolleyResponse(String response) {
                 FlickrResponse flickrResponse = mGsonBuilderHelper.getJsonFromString(response, FlickrResponse.class);
@@ -324,7 +280,11 @@ public class ImageFragment extends Fragment {
                 mImageResponse.updateFlickrResponse(flickrResponse);
 //                Log.d(TAG, "For page  = "+ 2+" Response is :"+flickrResponse + "");
 //                initListViewAdapter(mContext);
-                mImageListAdapter.notifyDataSetChanged();
+//                mImageListAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+
+                mSwipeRefreshLayout.setEnabled(false);
+
             }
 
             @Override
@@ -342,6 +302,7 @@ public class ImageFragment extends Fragment {
 //                        mImageResponse.setFlickrResponse(flickrResponse);
 //                        initListViewAdapter(mContext);
                         mImageResponse.updateFlickrResponse(flickrResponse);
+                        mSwipeRefreshLayout.setEnabled(false);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }

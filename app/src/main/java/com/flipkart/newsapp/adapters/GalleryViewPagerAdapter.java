@@ -24,7 +24,7 @@ import com.flipkart.newsapp.utils.HttpsTrustManager;
 /**
  * Created by kumar.samdwar on 18/05/15.
  */
-public class GalleryViewPagerAdapter extends PagerAdapter {
+public class GalleryViewPagerAdapter extends PagerAdapter implements BaseNewsAdapterUpdaterListener {
     private static final String TAG = "FLICKR";
     private Context mContext;
     private NetworkRequestQueue mNetworkRequestQueue;
@@ -41,6 +41,7 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
         mImageResponse = ImageResponse.getInstance();
         mNetworkRequestQueue = NetworkRequestQueue.getInstance();
         mImageLoader = mNetworkRequestQueue.getImageLoader();
+        mImageResponse.registerUpdateDataSourceListener(GalleryViewPagerAdapter.this);
     }
 
     private void setCurrentPosition(int position) {
@@ -146,4 +147,9 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
         container.removeView((RelativeLayout) object);
     }
 
+    @Override
+    public void updateListener() {
+        Log.i(TAG, "Just got update ...");
+        this.notifyDataSetChanged();
+    }
 }

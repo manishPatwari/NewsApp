@@ -2,6 +2,8 @@ package com.flipkart.newsapp.network.request.common;
 
 import android.util.Log;
 
+import com.flipkart.newsapp.adapters.BaseNewsAdapterUpdaterListener;
+import com.flipkart.newsapp.adapters.ImageListAdapter;
 import com.flipkart.newsapp.model.FlickrResponse;
 import com.flipkart.newsapp.model.Photo;
 
@@ -16,7 +18,8 @@ public class ImageResponse {
     private static final String TAG = "FLICKR";
     private static ImageResponse instance;
     private FlickrResponse mFlickrResponse;
-
+    private ImageListAdapter imageListAdapter;
+    private BaseNewsAdapterUpdaterListener baseNewsAdapterUpdaterListener;
 
     private ImageResponse() {
     }
@@ -41,6 +44,9 @@ public class ImageResponse {
         this.mFlickrResponse = mFlickrResponse;
     }
 
+    public void registerUpdateDataSourceListener(BaseNewsAdapterUpdaterListener adapter){
+        this.baseNewsAdapterUpdaterListener = adapter;
+    }
     public void updateFlickrResponse(FlickrResponse flickrResponse) {
         ArrayList<Photo> photoArrayList = mFlickrResponse.getFlickrPhoto().getPhoto();
 
@@ -58,12 +64,13 @@ public class ImageResponse {
         Log.d(TAG, "After Updating for Page -2 : " + newPhotoArrayList);
 
         photoArrayList.addAll(newPhotoArrayList);
+
         mFlickrResponse.getFlickrPhoto().setPhoto(photoArrayList);
 
         Log.d(TAG, "Size of ArrayList After Appending " + mFlickrResponse.getFlickrPhoto().getPhoto().size());
-
+        if(null!=baseNewsAdapterUpdaterListener) {
+            baseNewsAdapterUpdaterListener.updateListener();
+        }
 
     }
-
-
 }
