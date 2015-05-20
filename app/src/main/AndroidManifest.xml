@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.flipkart.newsapp" >
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,6 +21,7 @@
         </activity>
 
         <activity
+
                    android:name=".PlayerActivity"
                     android:screenOrientation="portrait"
                     android:label="@string/video" />
@@ -28,6 +30,12 @@
                    android:name=".VideoGalleryActivity"
                     android:screenOrientation="portrait"
                     android:label="@string/video" />
+<activity
+            android:name=".GalleryActivity"
+            android:label="@string/app_name" >
+        </activity>
+
+
     </application>
 
 </manifest>

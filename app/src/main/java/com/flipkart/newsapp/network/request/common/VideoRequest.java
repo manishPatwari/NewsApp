@@ -39,7 +39,7 @@ public class VideoRequest {
         VideoNewsController.getInstance().clearVideoList();
         videoAdapter.notifyDataSetChanged();
 
-        JsonObjectRequest videoReq = new JsonObjectRequest(youtube_url,
+        JsonObjectRequest videoReq = new JsonObjectRequest(youtube_url,null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

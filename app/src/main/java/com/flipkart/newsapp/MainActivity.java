@@ -1,5 +1,6 @@
 package com.flipkart.newsapp;
 
+import android.net.Uri;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -16,11 +17,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.flipkart.newsapp.adapters.ViewPagerAdapter;
+import com.flipkart.newsapp.fragments.ImageFragment;
 import com.flipkart.newsapp.config.Constants;
 import com.flipkart.newsapp.views.SlidingTabLayout;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ImageFragment.OnFragmentInteractionListener {
 
     // Declaring Your View and Variables
 
@@ -37,8 +39,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-AppInit.getInstance().initialize(this);
-        CharSequence Titles[] = {getResources().getString(R.string.image), getResources().getString(R.string.article) , getResources().getString(R.string.video)};
+
+        CharSequence Titles[] = {getResources().getString(R.string.article), getResources().getString(R.string.image), getResources().getString(R.string.video)};
+        AppInit.getInstance().initialize(this);
         // Creating The Toolbar and setting it as the Toolbar for the activity
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -63,7 +66,7 @@ AppInit.getInstance().initialize(this);
 
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Titles.length);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Titles.length);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
@@ -87,10 +90,9 @@ AppInit.getInstance().initialize(this);
         tabs.setViewPager(pager);
 
 
-
         mDrawerListItems = getResources().getStringArray(R.array.items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-          mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, R.id.menu_items, mDrawerListItems));
@@ -100,7 +102,7 @@ AppInit.getInstance().initialize(this);
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
                 Intent intent = new Intent(Constants.IntentActionType.CATEGORY_CHANGE.toString());
-                intent.putExtra(Constants.IntentExtraKey.CATEGORY.toString(),mDrawerListItems[i]);
+                intent.putExtra(Constants.IntentExtraKey.CATEGORY.toString(), mDrawerListItems[i]);
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
             }
         });
@@ -123,6 +125,8 @@ AppInit.getInstance().initialize(this);
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+        item.setVisible(false);
         return true;
     }
 
@@ -142,6 +146,9 @@ AppInit.getInstance().initialize(this);
     }
 
     @Override
+    public void onFragmentInteraction(Uri uri) {
+    }
+
     protected void onDestroy() {
         super.onDestroy();
         AppInit.getInstance().destroy();

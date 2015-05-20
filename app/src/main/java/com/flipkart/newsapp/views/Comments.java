@@ -3,6 +3,7 @@ package com.flipkart.newsapp.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,9 +57,7 @@ public class Comments extends LinearLayout {
                 (Context.LAYOUT_INFLATER_SERVICE);
         View mCommentLayout = inflater.inflate(R.layout.comment_layout,this);
 
-        //addView(mCommentLayout);
-
-        mCommentText = (EditText) mCommentLayout.findViewById(R.id.comment_text);
+            mCommentText = (EditText) mCommentLayout.findViewById(R.id.comment_text);
         mPostBtn = (Button) mCommentLayout.findViewById(R.id.comment_post_btn);
         mCommentList = (ListView) mCommentLayout.findViewById(R.id.comment_list);
 
@@ -77,10 +76,20 @@ public class Comments extends LinearLayout {
             @Override
             public void onClick(View view) {
                 String commentText = mCommentText.getText().toString();
-                mCommentsCtrl.postComment(commentText,"Manish Patwari","http://lh6.googleusercontent.com/-K5iaLXoeMmw/AAAAAAAAAAI/AAAAAAAAABE/iQIZJkprsPk/s48-c-k-no/photo.jpg");
+                mCommentsCtrl.postComment(commentText, "Manish Patwari", "http://lh6.googleusercontent.com/-K5iaLXoeMmw/AAAAAAAAAAI/AAAAAAAAABE/iQIZJkprsPk/s48-c-k-no/photo.jpg");
                 mCommentText.setText("");
             }
         });
+
+        /*mCommentList.setOnTouchListener(new OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });*/
     }
 
 
