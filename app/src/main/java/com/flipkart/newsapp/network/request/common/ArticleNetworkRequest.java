@@ -36,7 +36,7 @@ public class ArticleNetworkRequest{
     ArticleNewsController articleNewsController;
    // ResponseData   mResponseObject;
     public  void  getArticleNews(Context context,int start,int length,ListView listView, final ArticleFragment articleFragment, final ArticleNewsController articleNewsController, final boolean appendDataOnScroll){
-           String             mUrl                   ="http://www.faroo.com/api?q=iphone&l=en&src=news&f=json&key=@aBBIz-CKJTNQshA8yhSbB3xJ1Q_";
+           String  mUrl="http://www.faroo.com/api?q=iphone&l=en&src=news&f=json&key=@aBBIz-CKJTNQshA8yhSbB3xJ1Q_";
           // this.articleFragment=articleFragment;
            mContext=context;
            mListView=listView;
@@ -45,8 +45,9 @@ public class ArticleNetworkRequest{
            requestQueue= queue.getRequestQueue();
            mUrl=mUrl+"&start="+start+"&length="+length;
         Log.d("requestUrl " , mUrl);
-           final JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.GET,mUrl,
-                new Response.Listener<JSONObject>() {
+
+
+           final JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.GET,mUrl,null,new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                           System.out.println("Inside json request"+response);
@@ -63,8 +64,7 @@ public class ArticleNetworkRequest{
                            // articleNewsAdapter.notifyDataSetChanged();
                         }
                     }
-                },
-                new Response.ErrorListener() {
+                },new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 //                       Toast.makeText(mContext, error.toString(), Toast.LENGTH_LONG).show();

@@ -86,7 +86,7 @@ public class ArticleDetailPagerActivity extends ActionBarActivity {
         }
        /* if (id == R.id.menu_item_share) {
             Intent share = new Intent(Intent.ACTION_SEND);
-          // MenuItem shareItem = (MenuItem)item.findItem(R.id.menu_item_share);
+          // MenuItem shareItem = (MenuItem)item.findItem(R.id.article_item_share);
            // ShareActionProvider mShare = (ShareActionProvider) shareItem.getActionProvider();
             String newsUrl;
            // newsUrl=detailObject.getNewsData().get(position).getContentUrl();
