@@ -5,10 +5,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.flipkart.newsapp.R;
 import com.flipkart.newsapp.adapters.CommentAdapter;
@@ -53,6 +55,7 @@ public class Comments extends LinearLayout {
 
     private void initialize()
     {
+
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);
         View mCommentLayout = inflater.inflate(R.layout.comment_layout,this);
@@ -78,8 +81,15 @@ public class Comments extends LinearLayout {
             @Override
             public void onClick(View view) {
                 String commentText = mCommentText.getText().toString();
-                mCommentsCtrl.postComment(commentText, "Manish Patwari", "http://lh6.googleusercontent.com/-K5iaLXoeMmw/AAAAAAAAAAI/AAAAAAAAABE/iQIZJkprsPk/s48-c-k-no/photo.jpg");
-                mCommentText.setText("");
+                if (commentText.trim().isEmpty()) {
+                    Toast.makeText(mContext,"Please enter comment",Toast.LENGTH_SHORT);
+                } else {
+                    mCommentsCtrl.postComment(commentText, "Manish Patwari", "http://lh6.googleusercontent.com/-K5iaLXoeMmw/AAAAAAAAAAI/AAAAAAAAABE/iQIZJkprsPk/s48-c-k-no/photo.jpg");
+                    mCommentText.setText("");
+                    //Keyboard Close
+                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
+                }
             }
         });
 

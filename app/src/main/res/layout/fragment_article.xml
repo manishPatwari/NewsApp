@@ -5,10 +5,10 @@
     android:orientation="vertical"
     android:background="#fa6a6a" >
 
-
     <com.flipkart.newsapp.views.Comments
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/comment">
 
     </com.flipkart.newsapp.views.Comments>
 
