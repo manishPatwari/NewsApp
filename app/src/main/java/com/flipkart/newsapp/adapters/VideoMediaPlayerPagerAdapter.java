@@ -1,5 +1,6 @@
 package com.flipkart.newsapp.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
@@ -25,6 +26,7 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter {
     private ArrayList<VideosItem> video_list;
     private WebView webView;
     private Button shareButton;
+    private ProgressDialog progressDialog;
 
     public VideoMediaPlayerPagerAdapter(Context context , int numberOfPages, ArrayList<VideosItem> video_list) {
         mContext = context;
@@ -60,9 +62,9 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter {
                 //raising a share intent
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "Youtube Video description");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, video_list.get(position).getTitle().toString());
                 shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Youtube video title");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, video_list.get(position).getDescription().toString());
                 mContext.startActivity(shareIntent);
             }
         });
@@ -70,7 +72,29 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter {
         webView = (WebView) view.findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
 
-        webView.setWebViewClient( new WebViewClient());
+        webView.setWebViewClient( new WebViewClient(){
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+            /*public void onLoadResource (WebView view, String url) {
+                if (progressDialog == null) {
+                    progressDialog = new ProgressDialog(mContext);
+                    progressDialog.setMessage("Loading...");
+                    progressDialog.show();
+                }
+            }
+            public void onPageFinished(WebView view, String url) {
+                try{
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                        progressDialog = null;
+                    }
+                }catch(Exception exception){
+                    exception.printStackTrace();
+                }
+            }*/
+        });
         webView.loadUrl("https://www.youtube.com/watch?v="+ video_list.get(position).getVideoID());
         (container).addView(view, 0);
 
@@ -82,6 +106,7 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
 
         (container).removeView((View) object);
+        webView.destroy();
 
     }
 }
