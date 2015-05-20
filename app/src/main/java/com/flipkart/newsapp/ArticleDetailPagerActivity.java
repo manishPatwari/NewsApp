@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,9 +20,11 @@ public class ArticleDetailPagerActivity extends ActionBarActivity {
 
     ViewPager mViewPager;
     private int position;
-   // ArticleNewsController articleNewsController;
-   // ResponseData detailObject;
+    ArticleNewsDetailAdapter mNewsDetailAdapter;
+   //ArticleNewsController articleNewsController;
+    ResponseData detailObject;
     Toolbar toolbar;
+    int currentPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +40,7 @@ public class ArticleDetailPagerActivity extends ActionBarActivity {
         }
         //articleNewsController=ArticleNewsController.getInstance();
        // detailObject=articleNewsController.getResponseObject();
-        ArticleNewsDetailAdapter mNewsDetailAdapter = new ArticleNewsDetailAdapter(this,position);
+       mNewsDetailAdapter = new ArticleNewsDetailAdapter(this,position);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mNewsDetailAdapter);
         mViewPager.setCurrentItem(position);
@@ -60,13 +63,18 @@ public class ArticleDetailPagerActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-       /* if (id == R.id.menu_item_share) {
+        if (id == R.id.menu_item_share) {
+            currentPosition=  mNewsDetailAdapter.getCurrentPosition();
+            detailObject=ArticleNewsController.getInstance().getResponseObject();
+            String url=detailObject.getNewsData().get(currentPosition).getContentUrl();
             Intent share = new Intent(Intent.ACTION_SEND);
-          // MenuItem shareItem = (MenuItem)item.findItem(R.id.article_item_share);
-           // ShareActionProvider mShare = (ShareActionProvider) shareItem.getActionProvider();
-            String newsUrl;
-           // newsUrl=detailObject.getNewsData().get(position).getContentUrl();
-        }*/
+            share.setType("text/plain"); // might be text, sound, whatever
+            share.putExtra(Intent.EXTRA_TEXT, url);
+
+            Log.d("URL",url);
+            startActivity(share);
+
+        }
         return super.onOptionsItemSelected(item);
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.flipkart.newsapp.R;
 import com.flipkart.newsapp.controller.ArticleNewsController;
 import com.flipkart.newsapp.model.ResponseData;
 import com.flipkart.newsapp.network.request.common.NetworkRequestQueue;
+import com.flipkart.newsapp.utils.ListAnimationUtils;
 
 /**
  * Created by ashokkumar.y on 15/05/15.
@@ -26,6 +28,7 @@ public class ArticleNewsAdapter extends BaseAdapter implements AdapterListener {
     ImageLoader mImageLoader;
     NetworkRequestQueue mQueue;
    ArticleNewsController articleNewsController;
+    private int lastPosition = -1;
 
 
     //constructor
@@ -85,6 +88,19 @@ public class ArticleNewsAdapter extends BaseAdapter implements AdapterListener {
         } else {
             holder.articleImageView.setImageUrl("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQSRh1LEkGycmDCVeK5A7W3VL3EVgXfnsoPUGPKSR50eCBqHu_-gQ", mImageLoader);
         }
+        int mPosition =position;
+        ListAnimationUtils listAnimationUtils = new ListAnimationUtils(mContext);
+        Animation animation;
+        if(mPosition>lastPosition){
+            animation=listAnimationUtils.animateUpFromBottom();
+        }else{
+            animation=listAnimationUtils.animateDownFromTop();
+        }
+
+        lastPosition = position;
+//        Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
+        rowItem.startAnimation(animation);
+        animation.setDuration(430);
         return rowItem;
 
     }

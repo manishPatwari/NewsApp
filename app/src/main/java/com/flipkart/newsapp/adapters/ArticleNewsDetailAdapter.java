@@ -35,6 +35,10 @@ public class ArticleNewsDetailAdapter  extends PagerAdapter implements AdapterLi
     WebView mWebView;
     ArticleNewsController articleNewsController;
 
+
+
+    int currentPosition;
+
    //constructor
    public ArticleNewsDetailAdapter(Context context,int position){
        this.mContext=context;
@@ -47,6 +51,14 @@ public class ArticleNewsDetailAdapter  extends PagerAdapter implements AdapterLi
       // mResponse.registerDataSourceListener
        articleNewsController.registerDataSourceListener(ArticleNewsDetailAdapter.this);
    }
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public void setCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
+    }
+
     @Override
     public int getCount() {
         return mResponse.getNewsData().size();
@@ -62,6 +74,7 @@ public class ArticleNewsDetailAdapter  extends PagerAdapter implements AdapterLi
         ProgressBar progressBar = (ProgressBar) itemView.findViewById(R.id.articleProgressBar);
 
         mWebView=(WebView)itemView.findViewById(R.id.main_webview);
+        setCurrentPosition(position);
 
         mWebView.setTag(progressBar);
         WebSettings webSettings = mWebView.getSettings();
