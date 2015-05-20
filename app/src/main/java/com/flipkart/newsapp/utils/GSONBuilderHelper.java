@@ -11,7 +11,6 @@ import java.lang.reflect.Type;
  * Created by kumar.samdwar on 15/05/15.
  */
 public class GSONBuilderHelper {
-    private String mJsonString;
     private GsonBuilder mGsonBuilder;
     private Gson mGson;
 
