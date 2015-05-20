@@ -3,6 +3,7 @@ package com.flipkart.newsapp.adapters;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,18 +92,48 @@ public class GalleryViewPagerAdapter extends PagerAdapter implements BaseNewsAda
                 Toast.makeText(mContext,
                         "Page " + position + " clicked",
                         Toast.LENGTH_LONG).show();
-                showDialog(flickrResponse, mImageLoader, position);
+//                ((Activity)mContext).getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+//                showDialog(flickrResponse, mImageLoader, position);
+                showFullScreenImageSlider(flickrResponse, mImageLoader, position);
+
+
             }
         });
         container.addView(rowView);
         return rowView;
     }
 
+    private void showFullScreenImageSlider(FlickrResponse flickrResponse, ImageLoader imageLoader, int position) {
+        final Dialog dialog = new Dialog(mContext, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
+//        Dialog dialog = new Dialog(mContext, android.R.style.Theme_Material);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //before
+//        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+//        (Activity)mContext.
+
+
+        dialog.setContentView(R.layout.full_screen_image);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+        ViewPager viewPager = (ViewPager) dialog.findViewById(R.id.full_screen_image_slide_view);
+        FullScreenImageSlideAdapter fullScreenImageSlideAdapter =  new FullScreenImageSlideAdapter(mContext);
+        viewPager.setAdapter(fullScreenImageSlideAdapter);
+        viewPager.setCurrentItem(position);
+        dialog.show();
+        ImageButton closeDialogButton = (ImageButton) dialog.findViewById(R.id.close_button);
+        closeDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
     public NetworkImageView getNetworkImageView() {
         return mNetworkImageView;
     }
 
-    void showDialog(FlickrResponse flickrResponse, ImageLoader imageLoader, int position) {
+    /*void showDialog(FlickrResponse flickrResponse, ImageLoader imageLoader, int position) {
         final Dialog dialog = new Dialog(mContext, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
         dialog.setContentView(R.layout.fragment_dialog);
         dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
@@ -120,7 +151,7 @@ public class GalleryViewPagerAdapter extends PagerAdapter implements BaseNewsAda
                 dialog.dismiss();
             }
         });
-    }
+    }*/
 
     @Override
     public boolean isViewFromObject(View view, Object o) {
