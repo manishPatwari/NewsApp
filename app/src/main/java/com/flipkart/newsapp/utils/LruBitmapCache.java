@@ -5,25 +5,25 @@ import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.util.LruCache;
 
-import com.android.volley.toolbox.ImageLoader.ImageCache;
+import com.android.volley.toolbox.ImageLoader;
 
 /**
  * Created by manish.patwari on 5/10/15.
  */
 public class LruBitmapCache extends LruCache<String, Bitmap>
-        implements ImageCache {
+        implements ImageLoader.ImageCache {
 
     public LruBitmapCache(int maxSize) {
         super(maxSize);
     }
 
     public LruBitmapCache(Context ctx) {
-        this(getCacheSize(ctx));
+        this(getDefaultLruCacheSize());
     }
 
     @Override
     protected int sizeOf(String key, Bitmap value) {
-        return value.getRowBytes() * value.getHeight();
+        return value.getRowBytes() * value.getHeight()/1024;
     }
 
     @Override
@@ -34,6 +34,13 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
     @Override
     public void putBitmap(String url, Bitmap bitmap) {
         put(url, bitmap);
+    }
+
+    public static int getDefaultLruCacheSize() {
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 8;
+
+        return cacheSize;
     }
 
     // Returns a cache size equal to approximately three screens worth of images.

@@ -118,7 +118,15 @@ public class GalleryViewPagerAdapter extends PagerAdapter implements BaseNewsAda
         ViewPager viewPager = (ViewPager) dialog.findViewById(R.id.full_screen_image_slide_view);
         FullScreenImageSlideAdapter fullScreenImageSlideAdapter =  new FullScreenImageSlideAdapter(mContext);
         viewPager.setAdapter(fullScreenImageSlideAdapter);
-        viewPager.setCurrentItem(position);
+        viewPager.setCurrentItem(position-1);
+        viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
+            @Override
+            public void transformPage(View page, float position) {
+                final float normalizedposition = Math.abs(Math.abs(position) - 1);
+                page.setScaleX(normalizedposition / 2 + 0.5f);
+                page.setScaleY(normalizedposition / 2 + 0.5f);
+            }
+        });
         dialog.show();
         ImageButton closeDialogButton = (ImageButton) dialog.findViewById(R.id.close_button);
         closeDialogButton.setOnClickListener(new View.OnClickListener() {
