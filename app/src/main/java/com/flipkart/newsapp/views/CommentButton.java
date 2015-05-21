@@ -17,6 +17,9 @@ public class CommentButton extends LinearLayout {
     private Context mContext;
     private Boolean isDialogBoxCreated = false;
     private  Dialog dialog;
+    private Comments mComments;
+    Button mCommentBtn;
+    String mCommentBtnText = " Comments";
     public CommentButton(Context context) {
         super(context);
         mContext = context;
@@ -45,15 +48,15 @@ public class CommentButton extends LinearLayout {
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT);
-        Button btn = new Button(mContext);
+         mCommentBtn = new Button(mContext);
 
-        btn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.comment,0,0,0);
+        mCommentBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.comment,0,0,0);
 
-        btn.setLayoutParams(params);
-        btn.setPadding(25,30,25,15);
-        btn.setText(" Comments");
-        addView(btn);
-        btn.setOnClickListener(new OnClickListener() {
+        mCommentBtn.setLayoutParams(params);
+        mCommentBtn.setPadding(25,30,25,15);
+        mCommentBtn.setText(mCommentBtnText +" (0)");
+        addView(mCommentBtn);
+        mCommentBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!isDialogBoxCreated)
@@ -75,6 +78,11 @@ public class CommentButton extends LinearLayout {
         closeDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(mComments == null)
+                {
+                    mComments =(Comments) dialog.findViewById(R.id.comments_layout);
+                }
+                mCommentBtn.setText(mCommentBtnText +" ("+mComments.getNumberOfComments()+")");
                 dialog.dismiss();
             }
         });

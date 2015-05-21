@@ -67,6 +67,9 @@ public class Comments extends LinearLayout {
         }
     }
 
+    public int getNumberOfComments(){
+        return mCommentsCtrl.getCommentItemsLength();
+    }
 
 
     private void initialize()
