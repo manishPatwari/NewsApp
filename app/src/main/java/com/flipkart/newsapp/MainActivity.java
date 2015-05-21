@@ -1,6 +1,7 @@
 package com.flipkart.newsapp;
 
 import android.net.Uri;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -17,12 +18,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.flipkart.newsapp.adapters.ViewPagerAdapter;
+import com.flipkart.newsapp.fragments.ArticleFragment;
+import com.flipkart.newsapp.views.SlidingTabLayout;
+
+
+
+
 import com.flipkart.newsapp.fragments.ImageFragment;
 import com.flipkart.newsapp.config.Constants;
 import com.flipkart.newsapp.views.SlidingTabLayout;
 
 
 public class MainActivity extends ActionBarActivity implements ImageFragment.OnFragmentInteractionListener {
+
 
     // Declaring Your View and Variables
 
@@ -145,6 +153,13 @@ public class MainActivity extends ActionBarActivity implements ImageFragment.OnF
         return super.onOptionsItemSelected(item);
     }
 
+/*
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }*/
+
+
     @Override
     public void onFragmentInteraction(Uri uri) {
     }
@@ -153,4 +168,5 @@ public class MainActivity extends ActionBarActivity implements ImageFragment.OnF
         super.onDestroy();
         AppInit.getInstance().destroy();
     }
+
 }

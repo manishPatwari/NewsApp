@@ -13,11 +13,11 @@ public class AppPreferences {
     private static final String PACKAGE_NAME = "com.flipkart.newsapp";
 
     // Google Console APIs developer key
-    public static final String YOUTUBE_DEVELOPER_KEY = "AIzaSyCwOnp5WDS9OD8P5zHoqynm0t8cbkT-GDo";
+    public static final String YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=AIzaSyAy_mjrGdkTjmBumgnKdqsvWGi-fE8vVkQ&q=";
 
     private static AppPreferences instance;
     private SharedPreferences sharedPreferences;
-    public static String FLICKR_API_URL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=5d96cc677f6446044c8bd880b943549b&per_page=30&format=json&nojsoncallback=1";
+    public static String FLICKR_API_URL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=5d96cc677f6446044c8bd880b943549b&per_page=30&format=json&nojsoncallback=1&safe_search=true";
 
     private AppPreferences(){};
 

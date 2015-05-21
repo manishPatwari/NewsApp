@@ -1,4 +1,9 @@
 <resources>
+
+
+    <!-- The minimum subtitle font size. -->
+    <dimen name="subtitle_minimum_font_size">13sp</dimen>
+
     <color name="ColorPrimary">#ff004d5e</color>
     <color name="ColorPrimaryDark">#ff006071</color>
     <color name="tabsScrollColor">#ff119da4</color>

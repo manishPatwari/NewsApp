@@ -1,9 +1,10 @@
 package com.flipkart.newsapp.views;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -53,6 +54,21 @@ public class Comments extends LinearLayout {
     }
 
 
+    private void postComment() {
+        String commentText = mCommentText.getText().toString();
+        if (commentText.trim().isEmpty()) {
+            Toast.makeText(mContext,"Please enter comment",Toast.LENGTH_SHORT);
+        } else {
+            mCommentsCtrl.postComment(commentText, "Manish Patwari", "http://lh6.googleusercontent.com/-K5iaLXoeMmw/AAAAAAAAAAI/AAAAAAAAABE/iQIZJkprsPk/s48-c-k-no/photo.jpg");
+            mCommentText.setText("");
+            //Keyboard Close
+            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
+        }
+    }
+
+
+
     private void initialize()
     {
 
@@ -60,9 +76,7 @@ public class Comments extends LinearLayout {
                 (Context.LAYOUT_INFLATER_SERVICE);
         View mCommentLayout = inflater.inflate(R.layout.comment_layout,this);
 
-        //addView(mCommentLayout);
-
-        mCommentText = (EditText) mCommentLayout.findViewById(R.id.comment_text);
+            mCommentText = (EditText) mCommentLayout.findViewById(R.id.comment_text);
         mPostBtn = (Button) mCommentLayout.findViewById(R.id.comment_post_btn);
         mCommentList = (ListView) mCommentLayout.findViewById(R.id.comment_list);
 
@@ -80,20 +94,31 @@ public class Comments extends LinearLayout {
         mPostBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                String commentText = mCommentText.getText().toString();
-                if (commentText.trim().isEmpty()) {
-                    Toast.makeText(mContext,"Please enter comment",Toast.LENGTH_SHORT);
-                } else {
-                    mCommentsCtrl.postComment(commentText, "Manish Patwari", "http://lh6.googleusercontent.com/-K5iaLXoeMmw/AAAAAAAAAAI/AAAAAAAAABE/iQIZJkprsPk/s48-c-k-no/photo.jpg");
-                    mCommentText.setText("");
-                    //Keyboard Close
-                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mCommentText.getWindowToken(), 0);
-                }
+                postComment();
             }
         });
 
-        mCommentList.setOnTouchListener(new OnTouchListener() {
+
+        mCommentText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                if (charSequence.toString().substring(start).contains("\n")) {
+                    postComment();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        /*mCommentList.setOnTouchListener(new OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -101,7 +126,7 @@ public class Comments extends LinearLayout {
                 v.getParent().requestDisallowInterceptTouchEvent(true);
                 return false;
             }
-        });
+        });*/
     }
 
 

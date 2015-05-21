@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ScrollView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +24,7 @@ import com.flipkart.newsapp.utils.HttpsTrustManager;
 /**
  * Created by kumar.samdwar on 18/05/15.
  */
-public class GalleryViewPagerAdapter extends PagerAdapter {
+public class GalleryViewPagerAdapter extends PagerAdapter implements BaseNewsAdapterUpdaterListener {
     private static final String TAG = "FLICKR";
     private Context mContext;
     private NetworkRequestQueue mNetworkRequestQueue;
@@ -41,15 +41,17 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
         mImageResponse = ImageResponse.getInstance();
         mNetworkRequestQueue = NetworkRequestQueue.getInstance();
         mImageLoader = mNetworkRequestQueue.getImageLoader();
+        mImageResponse.registerUpdateDataSourceListener(GalleryViewPagerAdapter.this);
     }
 
-    private void setCurrentPosition(int position){
+    private void setCurrentPosition(int position) {
         mPosition = position;
     }
 
-    public int getCurrentPosition(){
+    public int getCurrentPosition() {
         return mPosition;
     }
+
     @Override
     public int getCount() {
         return mImageResponse.getFlickrResponse().getFlickrPhoto().getPhoto().size();
@@ -60,7 +62,7 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
 
         LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = layoutInflater.inflate(R.layout.view_pager_image, container, false);
+        View rowView = (RelativeLayout) layoutInflater.inflate(R.layout.view_pager_image, container, false);
 
         TextView textView = (TextView) rowView.findViewById(R.id.title_text_view);
         mNetworkImageView = (NetworkImageView) rowView.findViewById(R.id.gallery_image_view);
@@ -81,6 +83,8 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
             textView.setText("Some Error Occurred !");
             mNetworkImageView.setErrorImageResId(R.drawable.error_ic);
         }
+
+
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,9 +98,10 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
         return rowView;
     }
 
-    public  NetworkImageView getNetworkImageView(){
+    public NetworkImageView getNetworkImageView() {
         return mNetworkImageView;
     }
+
     void showDialog(FlickrResponse flickrResponse, ImageLoader imageLoader, int position) {
         final Dialog dialog = new Dialog(mContext, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
         dialog.setContentView(R.layout.fragment_dialog);
@@ -139,7 +144,12 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((ScrollView) object);
+        container.removeView((RelativeLayout) object);
     }
 
+    @Override
+    public void updateListener() {
+        Log.i(TAG, "Just got update ...");
+        this.notifyDataSetChanged();
+    }
 }

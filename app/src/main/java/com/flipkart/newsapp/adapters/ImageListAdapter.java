@@ -22,7 +22,7 @@ import com.flipkart.newsapp.utils.ListAnimationUtils;
 /**
  * Created by kumar.samdwar on 17/05/15.
  */
-public class ImageListAdapter extends BaseAdapter {
+public class ImageListAdapter extends BaseAdapter implements BaseNewsAdapterUpdaterListener {
 
 
     private static final String TAG = "FLICKR";
@@ -127,6 +127,11 @@ public class ImageListAdapter extends BaseAdapter {
 //        lastPosition = position;
 //        animation = null;
         return view;
+    }
+
+    @Override
+    public void updateListener() {
+        this.notifyDataSetChanged();
     }
 
     public class ImageListViewHolder {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Button android:id="@+id/share_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Share"/>
+
+    <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/web_view"
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    android:layout_margin="10dp"
+    android:layout_below="@id/share_button"
+
+     />
+
+    <com.flipkart.newsapp.views.CommentButton
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/web_view">
+    </com.flipkart.newsapp.views.CommentButton>
+
+</RelativeLayout>
+
+

@@ -1,9 +1,13 @@
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
 .DS_Store
 /build
 /captures
+<<<<<<< HEAD
 
 .idea
+=======
+.idea
+
+NewsApp.iml
+>>>>>>> 514e2c037ccabfcd97ac095c4019d7fcf0f1f2e3
