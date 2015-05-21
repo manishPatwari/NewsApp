@@ -4,5 +4,5 @@
 /build
 /captures
 .idea
-
 NewsApp.iml
+app/app.iml
