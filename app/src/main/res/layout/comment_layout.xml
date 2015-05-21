@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:hint="Comment"
+        android:hint="What's on your mind ?"
         android:id="@+id/comment_text"
         android:maxLines="3"
         android:inputType="textMultiLine"/>
@@ -25,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/comment_list">
+        android:id="@+id/comment_list"
+        android:layout_margin="5dp">
     </ListView>
 </LinearLayout>

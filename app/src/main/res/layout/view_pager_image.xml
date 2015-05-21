@@ -10,7 +10,6 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:background="#ffe5ecf4"
         android:orientation="vertical">
 
         <!--android:background="#9DA3A4"
@@ -67,12 +66,19 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="90dp"
+            android:background="#ff004884"
             android:layout_alignParentBottom="true" >
-            <com.flipkart.newsapp.views.Comments
+            <com.flipkart.newsapp.views.CommentButton
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </com.flipkart.newsapp.views.CommentButton>
+            <!--<com.flipkart.newsapp.views.Comments
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true">
-            </com.flipkart.newsapp.views.Comments>
+            </com.flipkart.newsapp.views.Comments>-->
 
         </ScrollView>
 

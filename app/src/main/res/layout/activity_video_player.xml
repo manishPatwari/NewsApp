@@ -27,12 +27,11 @@
 
      />
 
-    <com.flipkart.newsapp.views.Comments
+    <com.flipkart.newsapp.views.CommentButton
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/web_view">
-
-    </com.flipkart.newsapp.views.Comments>
+        android:layout_below="@+id/web_view">
+    </com.flipkart.newsapp.views.CommentButton>
 
 </RelativeLayout>
 
