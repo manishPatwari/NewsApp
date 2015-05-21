@@ -44,7 +44,59 @@ public class VideoRequest {
                     public void onResponse(JSONObject response) {
                         video_list.addAll(VideoNewsController.getInstance().processVideoItem(response)) ;
 
+                        // notifying list adapter about data changes,so that it renders the list view with updated data
+                        videoAdapter.notifyDataSetChanged();
+                        pDialog.dismiss();
 
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Cache.Entry entry=null;
+                //Cache.Entry entry = NetworkRequestQueue.getInstance().getCache().get(AppPreferences.YOUTUBE_URL);
+                if (entry != null) {
+                    try {
+                        JSONObject data=null ;
+                        video_list.addAll(VideoNewsController.getInstance().processVideoItem(data)) ;
+
+                        VideoNewsController.getInstance().setVideosItems(video_list);
+
+                        // notifying list adapter about data changes,so that it renders the list view with updated data
+                        videoAdapter.notifyDataSetChanged();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+
+                }
+            }
+        });
+
+        // Adding request to request queue
+        NetworkRequestQueue.getInstance().addToRequestQueue(videoReq);
+    }
+
+
+    public void fetchMoreVideos(Context context, final VideoListAdapter videoAdapter, String drawerList){
+
+        /*ArrayList<VideosItem> tempData = video_list;
+        video_list.addAll(tempData);
+        videoAdapter.notifyDataSetChanged();*/
+
+        String youtube_url = AppPreferences.YOUTUBE_URL + drawerList + "&pageToken=" + VideoNewsController.getInstance().getNextPageToken();
+
+        pDialog = new ProgressDialog(context);
+        // Showing progress dialog before making http request
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+
+        JsonObjectRequest videoReq = new JsonObjectRequest(youtube_url,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        video_list.addAll(VideoNewsController.getInstance().processVideoItem(response)) ;
 
                         // notifying list adapter about data changes,so that it renders the list view with updated data
                         videoAdapter.notifyDataSetChanged();
@@ -80,4 +132,6 @@ public class VideoRequest {
         NetworkRequestQueue.getInstance().addToRequestQueue(videoReq);
     }
 
-}
+    }
+
+
