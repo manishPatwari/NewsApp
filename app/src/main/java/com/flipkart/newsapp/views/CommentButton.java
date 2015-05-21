@@ -2,7 +2,9 @@ package com.flipkart.newsapp.views;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -54,13 +56,12 @@ public class CommentButton extends LinearLayout {
 
         mCommentBtn.setLayoutParams(params);
         mCommentBtn.setPadding(25,30,25,15);
-        mCommentBtn.setText(mCommentBtnText +" (0)");
+        mCommentBtn.setText(mCommentBtnText + " (0)");
         addView(mCommentBtn);
         mCommentBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isDialogBoxCreated)
-                {
+                if (!isDialogBoxCreated) {
                     createCommentDialog();
                 }
                 dialog.show();
@@ -74,18 +75,42 @@ public class CommentButton extends LinearLayout {
         dialog.setContentView(R.layout.comment_dialog);
         dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
         dialog.show();
+
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() ==  KeyEvent.KEYCODE_BACK) {
+                    updateCommentCount();
+                }
+                return false;
+            }
+        });
         ImageButton closeDialogButton = (ImageButton) dialog.findViewById(R.id.close_button);
         closeDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mComments == null)
-                {
-                    mComments =(Comments) dialog.findViewById(R.id.comments_layout);
-                }
-                mCommentBtn.setText(mCommentBtnText +" ("+mComments.getNumberOfComments()+")");
+                updateCommentCount();
                 dialog.dismiss();
             }
         });
+
         isDialogBoxCreated = true;
+    }
+
+    private void updateCommentCount(){
+        if(mComments == null)
+        {
+            mComments =(Comments) dialog.findViewById(R.id.comments_layout);
+        }
+        mCommentBtn.setText(mCommentBtnText +" ("+mComments.getNumberOfComments()+")");
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+           updateCommentCount();
+          //  return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
