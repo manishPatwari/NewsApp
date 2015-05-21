@@ -6,7 +6,7 @@
 
     <color name="ColorPrimary">#ff005da0</color>
     <color name="ColorPrimaryDark">#ff004884</color>
-    <color name="tabsScrollColor">#ff119da4</color>
+    <color name="tabsScrollColor">#fffcfcfc</color>
     <color name="orange">#FF9900</color>
     <color name="green">#009900</color>
     <color name="blue">#000099</color>
