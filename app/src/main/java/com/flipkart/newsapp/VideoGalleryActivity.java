@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.webkit.WebView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.flipkart.newsapp.adapters.VideoMediaPlayerPagerAdapter;
@@ -16,13 +14,11 @@ import com.flipkart.newsapp.controller.VideoNewsController;
 import com.flipkart.newsapp.model.VideosItem;
 import com.flipkart.newsapp.network.request.common.NetworkRequestQueue;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 
 public class VideoGalleryActivity extends ActionBarActivity {
 
-    private final String TAG = this.getClass().getName();
     private ImageLoader mImageLoader;
     private NetworkRequestQueue mNetworkRequestQueue;
     private int listItemPosition;
@@ -31,8 +27,6 @@ public class VideoGalleryActivity extends ActionBarActivity {
     private Context mContext;
     private Toolbar toolbar;
     private ArrayList<VideosItem> video_list;
-    private WebView mWebView;
-    VideoMediaPlayerPagerAdapter customPagerAdapter;
 
     // Activity lifecycle
 
@@ -71,7 +65,7 @@ public class VideoGalleryActivity extends ActionBarActivity {
     public void initViewPager() {
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.video_pager);
-        customPagerAdapter = new VideoMediaPlayerPagerAdapter(VideoGalleryActivity.this, totalNumberOfItems, video_list);
+        VideoMediaPlayerPagerAdapter customPagerAdapter = new VideoMediaPlayerPagerAdapter(VideoGalleryActivity.this, totalNumberOfItems, video_list);
         viewPager.setAdapter(customPagerAdapter);
         viewPager.setCurrentItem(listItemPosition);
     }
@@ -88,34 +82,5 @@ public class VideoGalleryActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mWebView = customPagerAdapter.getWebView();
-
-        Log.d("NewsFeedWebView", "From Activity: "+ mWebView.toString());
-        mWebView.pauseTimers();
-        mWebView.stopLoading();
-        mWebView.onPause();
-        mWebView.loadUrl("about:blank");
-        mWebView.destroy();
-        mWebView = null;
-
-        try {
-            Class.forName("android.webkit.WebView")
-                    .getMethod("onPause", (Class[]) null)
-                    .invoke(mWebView, (Object[]) null);
-
-        } catch(ClassNotFoundException cnfe) {
-            Log.i(TAG, cnfe.toString());
-        } catch(NoSuchMethodException nsme) {
-            Log.i(TAG, nsme.toString());
-        } catch(InvocationTargetException ite) {
-            Log.i(TAG, ite.toString());
-        } catch (IllegalAccessException iae) {
-            Log.i(TAG, iae.toString());
-        }
     }
 }

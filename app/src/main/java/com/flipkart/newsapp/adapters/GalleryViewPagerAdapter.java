@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,7 +67,6 @@ public class GalleryViewPagerAdapter extends PagerAdapter implements BaseNewsAda
 
         TextView textView = (TextView) rowView.findViewById(R.id.title_text_view);
         mNetworkImageView = (NetworkImageView) rowView.findViewById(R.id.gallery_image_view);
-        mNetworkImageView.requestFocus();
 
         setCurrentPosition(position);
         final FlickrResponse flickrResponse = mImageResponse.getFlickrResponse();
@@ -113,23 +112,15 @@ public class GalleryViewPagerAdapter extends PagerAdapter implements BaseNewsAda
 
 //        (Activity)mContext.
 
-        Log.i(TAG, "postion after click in view pager is: "+position);
+
         dialog.setContentView(R.layout.full_screen_image);
         dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
         ViewPager viewPager = (ViewPager) dialog.findViewById(R.id.full_screen_image_slide_view);
         FullScreenImageSlideAdapter fullScreenImageSlideAdapter =  new FullScreenImageSlideAdapter(mContext);
         viewPager.setAdapter(fullScreenImageSlideAdapter);
-        viewPager.setCurrentItem(position-1);
-        viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
-            @Override
-            public void transformPage(View page, float position) {
-                final float normalizedposition = Math.abs(Math.abs(position) - 1);
-                page.setScaleX(normalizedposition / 2 + 0.5f);
-                page.setScaleY(normalizedposition / 2 + 0.5f);
-            }
-        });
+        viewPager.setCurrentItem(position);
         dialog.show();
-        ImageView closeDialogButton = (ImageView) dialog.findViewById(R.id.close_button);
+        ImageButton closeDialogButton = (ImageButton) dialog.findViewById(R.id.close_button);
         closeDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,6 +132,26 @@ public class GalleryViewPagerAdapter extends PagerAdapter implements BaseNewsAda
     public NetworkImageView getNetworkImageView() {
         return mNetworkImageView;
     }
+
+    /*void showDialog(FlickrResponse flickrResponse, ImageLoader imageLoader, int position) {
+        final Dialog dialog = new Dialog(mContext, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen);
+        dialog.setContentView(R.layout.fragment_dialog);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+        NetworkImageView fullScreenImageView = (NetworkImageView) dialog.findViewById(R.id.full_screen_image_view);
+        JsonPhotoDataProvider jsonPhotoDataProvider = new JsonPhotoDataProvider(flickrResponse, position);
+        String imageURL = jsonPhotoDataProvider.getImageUrl();
+        fullScreenImageView.setImageUrl(imageURL, imageLoader);
+        HttpsTrustManager.allowAllSSL();
+        imageLoader.get(imageURL, ImageLoader.getImageListener(fullScreenImageView, R.drawable.loading_txt, R.drawable.error_ic));
+        dialog.show();
+        ImageButton closeDialogButton = (ImageButton) dialog.findViewById(R.id.close_button);
+        closeDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }*/
 
     @Override
     public boolean isViewFromObject(View view, Object o) {
