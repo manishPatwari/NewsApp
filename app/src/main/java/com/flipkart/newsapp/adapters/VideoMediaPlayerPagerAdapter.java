@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,8 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter {
         webView = (WebView) view.findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
 
+        Log.d("NewsFeedWebView", "From Adapter: " +webView.toString());
+
         webView.setWebViewClient( new WebViewClient(){
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
@@ -100,6 +103,10 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter {
 
         return view;
 
+    }
+
+    public WebView getWebView(){
+        return webView;
     }
 
     @Override
