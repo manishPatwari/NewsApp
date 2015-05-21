@@ -16,6 +16,7 @@ public class VideoNewsController {
     private static VideoNewsController instance;
 
     private ArrayList<VideosItem> video_list = new ArrayList<>();
+    private static String nextPageToken;
 
     public static VideoNewsController getInstance(){
         if(instance == null){
@@ -31,7 +32,9 @@ public class VideoNewsController {
     public ArrayList<VideosItem> processVideoItem(JSONObject response) {
         JSONArray urlItems=null;
 
+
         try{
+            setNextPageToken(response.getString("nextPageToken"));
             urlItems=(JSONArray) response.get("items");
         }catch (JSONException e){
             e.printStackTrace();
@@ -47,6 +50,7 @@ public class VideoNewsController {
                 videoData.setDescription(obj.getJSONObject("snippet").getString("description"));
                 videoData.setDate(obj.getJSONObject("snippet").getString("publishedAt"));
                 videoData.setVideoID(obj.getJSONObject("id").getString("videoId"));
+
                 video_list.add(videoData);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -59,10 +63,9 @@ public class VideoNewsController {
     }
 
 
-
     public void setVideosItems(ArrayList<VideosItem> videosItems) {
 
-        this.video_list=videosItems;
+        video_list=videosItems;
 
     }
 
@@ -72,5 +75,16 @@ public class VideoNewsController {
 
     public void clearVideoList(){
         video_list.clear();
+    }
+
+
+
+    public String getNextPageToken() {
+        return nextPageToken;
+    }
+
+    public void setNextPageToken(String token){
+        nextPageToken=token;
+
     }
 }

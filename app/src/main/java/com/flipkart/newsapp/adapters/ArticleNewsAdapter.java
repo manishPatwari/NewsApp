@@ -4,49 +4,54 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.flipkart.newsapp.ArticleNewsListener.AdapterListener;
 import com.flipkart.newsapp.R;
+import com.flipkart.newsapp.controller.ArticleNewsController;
 import com.flipkart.newsapp.model.ResponseData;
 import com.flipkart.newsapp.network.request.common.NetworkRequestQueue;
-
-import java.util.zip.Inflater;
+import com.flipkart.newsapp.utils.ListAnimationUtils;
 
 /**
  * Created by ashokkumar.y on 15/05/15.
  */
-public class ArticleNewsAdapter extends BaseAdapter {
+public class ArticleNewsAdapter extends BaseAdapter implements AdapterListener {
 
     Context mContext;
     ResponseData mResponse;
     // RequestQueue        mRequestQueue ;
     ImageLoader mImageLoader;
     NetworkRequestQueue mQueue;
+   ArticleNewsController articleNewsController;
+    private int lastPosition = -1;
 
 
     //constructor
     // public ArticleNewsAdapter(Context context,  ResponseData mResponse){
-    public ArticleNewsAdapter(Context context, ResponseData mResponse) {
+    public ArticleNewsAdapter(Context context) {
         this.mContext = context;
-        this.mResponse = mResponse;
+        articleNewsController=ArticleNewsController.getInstance();
+        this.mResponse = articleNewsController.getResponseObject();
         mQueue = NetworkRequestQueue.getInstance();
         mQueue.initialize(context);
         // mRequestQueue=mQueue.getRequestQueue();
         mImageLoader = mQueue.getImageLoader();
+        articleNewsController.registerDataSourceListener(ArticleNewsAdapter.this);
 
     }
 
-    //constructor
+   /* //constructor
     public ArticleNewsAdapter(Context context) {
         this.mContext = context;
 
 
-    }
+    }*/
+
 
     @Override
     public int getCount() {
@@ -83,8 +88,26 @@ public class ArticleNewsAdapter extends BaseAdapter {
         } else {
             holder.articleImageView.setImageUrl("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQSRh1LEkGycmDCVeK5A7W3VL3EVgXfnsoPUGPKSR50eCBqHu_-gQ", mImageLoader);
         }
+        int mPosition =position;
+        ListAnimationUtils listAnimationUtils = new ListAnimationUtils(mContext);
+        Animation animation;
+        if(mPosition>lastPosition){
+            animation=listAnimationUtils.animateUpFromBottom();
+        }else{
+            animation=listAnimationUtils.animateDownFromTop();
+        }
+
+        lastPosition = position;
+//        Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
+        rowItem.startAnimation(animation);
+        animation.setDuration(430);
         return rowItem;
 
+    }
+
+    @Override
+    public void notifyListener() {
+        this.notifyDataSetChanged();
     }
 }
 class mViewHolder{

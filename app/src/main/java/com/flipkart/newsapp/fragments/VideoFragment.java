@@ -23,6 +23,7 @@ import com.flipkart.newsapp.VideoGalleryActivity;
 import com.flipkart.newsapp.adapters.VideoListAdapter;
 import com.flipkart.newsapp.config.Constants;
 import com.flipkart.newsapp.controller.VideoNewsController;
+import com.flipkart.newsapp.listener.EndlessListScrollListener;
 import com.flipkart.newsapp.model.VideosItem;
 import com.flipkart.newsapp.network.request.common.VideoRequest;
 import com.flipkart.newsapp.utils.DemoUtil;
@@ -61,13 +62,22 @@ public class VideoFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), "You selected : " + (position + 1) + " item", Toast.LENGTH_SHORT).show();
 
                 Intent mpdIntent = new Intent(getActivity().getApplicationContext(), VideoGalleryActivity.class)
-                        .setData(Uri.parse("http://html5demos.com/assets/dizzy.mp4"))
+                        .setData(Uri.parse(""))
                         .putExtra(PlayerActivity.CONTENT_ID_EXTRA, "")
                         .putExtra("ListItemPosition", position)
                         .putExtra("TotalNumberOfItems", videoAdapter.getCount())
                         .putExtra(PlayerActivity.CONTENT_TYPE_EXTRA, DemoUtil.TYPE_MP4);
+
                 startActivity(mpdIntent);
 
+
+            }
+        });
+        videoList.setOnScrollListener(new EndlessListScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Log.d("Lazy", "Loading more data... page = " + totalItemsCount);
+                videoRequest.fetchMoreVideos(getActivity(),videoAdapter, default_drawer_list);
 
             }
         });
@@ -79,7 +89,7 @@ public class VideoFragment extends Fragment {
                 new IntentFilter(Constants.IntentActionType.CATEGORY_CHANGE.toString()));
 
 
-
+// TODO : remove as controller
         videoRequest =new VideoRequest();
         videoRequest.fetchVideos(getActivity(),videoAdapter, default_drawer_list);
 

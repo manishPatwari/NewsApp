@@ -27,6 +27,8 @@ public class VideoGalleryActivity extends ActionBarActivity {
     private Context mContext;
     private Toolbar toolbar;
     private ArrayList<VideosItem> video_list;
+    private ViewPager viewPager;
+    private VideoMediaPlayerPagerAdapter customPagerAdapter;
 
     // Activity lifecycle
 
@@ -58,14 +60,20 @@ public class VideoGalleryActivity extends ActionBarActivity {
             video_list = VideoNewsController.getInstance().getVideosItems();
 
 
-            initViewPager();
+
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initViewPager();
     }
 
     public void initViewPager() {
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.video_pager);
-        VideoMediaPlayerPagerAdapter customPagerAdapter = new VideoMediaPlayerPagerAdapter(VideoGalleryActivity.this, totalNumberOfItems, video_list);
+      viewPager =  (ViewPager) findViewById(R.id.video_pager);
+         customPagerAdapter = new VideoMediaPlayerPagerAdapter(VideoGalleryActivity.this, totalNumberOfItems, video_list);
         viewPager.setAdapter(customPagerAdapter);
         viewPager.setCurrentItem(listItemPosition);
     }
@@ -82,5 +90,16 @@ public class VideoGalleryActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+       // customPagerAdapter.destroyItem();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

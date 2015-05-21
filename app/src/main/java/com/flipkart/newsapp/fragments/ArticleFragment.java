@@ -1,27 +1,31 @@
 package com.flipkart.newsapp.fragments;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.flipkart.newsapp.ArticleDetailPagerActivity;
 import com.flipkart.newsapp.ArticleNewsListener.EndlessScrollListener;
 import com.flipkart.newsapp.R;
 import com.flipkart.newsapp.adapters.ArticleNewsAdapter;
-import com.flipkart.newsapp.controllers.ArticleNewsController.ArticleNewsController;
+import com.flipkart.newsapp.config.Constants;
+import com.flipkart.newsapp.controller.ArticleNewsController;
 import com.flipkart.newsapp.model.ResponseData;
 import com.flipkart.newsapp.network.request.common.ArticleNetworkRequest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 
 /**
@@ -34,16 +38,16 @@ public class ArticleFragment extends Fragment {
     Context mContext;
     int start;//new
     int length;//new
-/*    int currentFirstVisibleItem;
-    int currentVisibleItemCount;*/
-  //  String             mUrl                   ="http://www.faroo.com/api?q=iphone&l=en&src=news&f=json&key=@aBBIz-CKJTNQshA8yhSbB3xJ1Q_";
-    ArticleNetworkRequest getNewsListData= new ArticleNetworkRequest();
+    /*    int currentFirstVisibleItem;
+        int currentVisibleItemCount;*/
+    //  String             mUrl                   ="http://www.faroo.com/api?q=iphone&l=en&src=news&f=json&key=@aBBIz-CKJTNQshA8yhSbB3xJ1Q_";
+    ArticleNetworkRequest getNewsListData = new ArticleNetworkRequest();
     ArticleNewsController articleNewsController;
     ResponseData mObject;
-    boolean appendDataOnScroll=false;
+    boolean appendDataOnScroll = false;
     ArticleNewsAdapter articleNewsAdapter;
     public final String TAG = "ARTICLE_NEWS";
-
+    String searchKey;
 
 
     @Override
@@ -54,31 +58,54 @@ public class ArticleFragment extends Fragment {
         mListView = (ListView) view.findViewById(R.id.listView);
         mActivity = getActivity();//new
         mContext = mActivity.getApplicationContext();//new
-        articleNewsController=ArticleNewsController.getInstance();
+        articleNewsController = ArticleNewsController.getInstance();
         start = 1;
         length = 10;
-        getNewsListData.getArticleNews(mContext, start, length, mListView,this,articleNewsController,appendDataOnScroll);
-      mListView.setOnScrollListener(new EndlessScrollListener() {
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                searchKey = intent.getStringExtra(Constants.IntentExtraKey.CATEGORY.toString());
+                Log.i("Drawer_Click", searchKey);
+                appendDataOnScroll=false;
+                //try {
+                if (searchKey == "Top News") {
+                    searchKey = "topnews";
+
+                }
+                  getNewsListData.getArticleNews(mContext, start, length, mListView,ArticleFragment.this,articleNewsController,appendDataOnScroll,searchKey);
+            }
+        };
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.IntentActionType.CATEGORY_CHANGE.toString());
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(receiver, filter);
+        if (searchKey == null) {
+            searchKey = "phone";
+            appendDataOnScroll=false;
+            getNewsListData.getArticleNews(mContext, start, length, mListView, this, articleNewsController, appendDataOnScroll, searchKey);
+        }
 
 
-          @Override
+        mListView.setOnScrollListener(new EndlessScrollListener() {
+
+
+            @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                Log.d(TAG,"Inside on load more");
-              articleNewsController=ArticleNewsController.getInstance();
-              start = this.getPreviousTotalItemCount()+1;
-              length = start + 10-1;
-               appendDataOnScroll=true;
-               getNewsListData.getArticleNews(mContext, start, length, mListView,ArticleFragment.this,articleNewsController,appendDataOnScroll);
+                Log.d(TAG, "Inside on load more");
+                articleNewsController = ArticleNewsController.getInstance();
+                start = this.getPreviousTotalItemCount() + 1;
+                length = start + 10 - 1;
+                appendDataOnScroll = true;
+                getNewsListData.getArticleNews(mContext, start, length, mListView, ArticleFragment.this, articleNewsController, appendDataOnScroll, searchKey);
 
             }
         });
-       mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //responseStringData=responseObject.toString();//new
                 Intent intent;
                 intent = new Intent(mContext, ArticleDetailPagerActivity.class);
-               // intent.putExtra("data", responseStringData);
+                // intent.putExtra("data", responseStringData);
                 intent.putExtra("position", i);
                 startActivity(intent);
             }
@@ -133,14 +160,17 @@ public class ArticleFragment extends Fragment {
 
         return view;
     }
-    public void setResponseInAdapter(){
-       // ArticleNewsController articleNewsController = new ArticleNewsController();
-        mObject=articleNewsController.getResponseObject();
-        articleNewsAdapter = new ArticleNewsAdapter(mContext,mObject );
-       // articleNewsAdapter.notifyDataSetChanged();
+
+    public void setResponseInAdapter() {
+        // ArticleNewsController articleNewsController = new ArticleNewsController();
+        //mObject=articleNewsController.getResponseObject();
+        // articleNewsController=ArticleNewsController.getInstance();
+        articleNewsAdapter = new ArticleNewsAdapter(mContext);
+        // articleNewsAdapter.notifyDataSetChanged();
         mListView.setAdapter(articleNewsAdapter);
     }
-    public ArticleNewsAdapter getArticleNewsAdapter(){
+
+    public ArticleNewsAdapter getArticleNewsAdapter() {
         return articleNewsAdapter;
     }
 }
