@@ -1,8 +1,7 @@
 package com.flipkart.newsapp;
 
-import android.net.Uri;
-
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -18,14 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.flipkart.newsapp.adapters.ViewPagerAdapter;
-import com.flipkart.newsapp.fragments.ArticleFragment;
-import com.flipkart.newsapp.views.SlidingTabLayout;
-
-
-
-
-import com.flipkart.newsapp.fragments.ImageFragment;
 import com.flipkart.newsapp.config.Constants;
+import com.flipkart.newsapp.fragments.ImageFragment;
+import com.flipkart.newsapp.utils.DemoUtil;
 import com.flipkart.newsapp.views.SlidingTabLayout;
 
 
@@ -148,6 +142,17 @@ public class MainActivity extends ActionBarActivity implements ImageFragment.OnF
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if(id == R.id.exoplayer_test){
+
+            Intent playerIntent = new Intent(this, PlayerActivity.class)
+                    .setData(Uri.parse("http://html5demos.com/assets/dizzy.mp4"))
+                    .putExtra(PlayerActivity.CONTENT_ID_EXTRA, "")
+                    .putExtra(PlayerActivity.CONTENT_TYPE_EXTRA, DemoUtil.TYPE_MP4);
+            startActivity(playerIntent);
+            return true;
+
+
         }
 
         return super.onOptionsItemSelected(item);

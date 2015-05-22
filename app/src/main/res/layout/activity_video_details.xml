@@ -8,6 +8,15 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        />
+
   <com.google.android.exoplayer.VideoSurfaceView android:id="@+id/surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,7 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#88000000"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="50dp">
 
         <TextView android:id="@+id/player_state_view"
             android:layout_width="match_parent"
@@ -61,7 +71,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:padding="10dp">
 
             <Button android:id="@+id/video_controls"
                 android:layout_width="wrap_content"

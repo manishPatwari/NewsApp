@@ -214,8 +214,6 @@ public class VideoDetailViewPagerAdapter extends PagerAdapter implements Surface
 
         (container).addView(view, 0);
 
-
-
         return view;
 
     }
