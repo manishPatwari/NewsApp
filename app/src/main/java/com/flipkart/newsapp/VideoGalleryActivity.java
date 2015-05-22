@@ -2,10 +2,13 @@ package com.flipkart.newsapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -13,6 +16,7 @@ import com.flipkart.newsapp.adapters.VideoMediaPlayerPagerAdapter;
 import com.flipkart.newsapp.controller.VideoNewsController;
 import com.flipkart.newsapp.model.VideosItem;
 import com.flipkart.newsapp.network.request.common.NetworkRequestQueue;
+import com.flipkart.newsapp.utils.DemoUtil;
 
 import java.util.ArrayList;
 
@@ -29,6 +33,8 @@ public class VideoGalleryActivity extends ActionBarActivity {
     private ArrayList<VideosItem> video_list;
     private ViewPager viewPager;
     private VideoMediaPlayerPagerAdapter customPagerAdapter;
+    int currentPosition;
+
 
     // Activity lifecycle
 
@@ -79,7 +85,14 @@ public class VideoGalleryActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)     {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -89,6 +102,32 @@ public class VideoGalleryActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+
+        if (id == R.id.menu_item_share) {
+            currentPosition = customPagerAdapter.getCurrentPosition();
+            video_list = VideoNewsController.getInstance().getVideosItems();
+            String url = video_list.get(currentPosition).getThumbnailUrl();
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain"); // might be text, sound, whatever
+            share.putExtra(Intent.EXTRA_TEXT, url);
+
+            Log.d("URL", url);
+            startActivity(share);
+
+
+        }
+        if(id == R.id.exoplayer_test){
+
+            Intent playerIntent = new Intent(this, PlayerActivity.class)
+                    .setData(Uri.parse("http://html5demos.com/assets/dizzy.mp4"))
+                    .putExtra(PlayerActivity.CONTENT_ID_EXTRA, "")
+                    .putExtra(PlayerActivity.CONTENT_TYPE_EXTRA, DemoUtil.TYPE_MP4);
+            startActivity(playerIntent);
+            return true;
+
+
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

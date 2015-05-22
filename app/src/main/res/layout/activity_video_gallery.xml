@@ -4,6 +4,15 @@
     android:background="#ff004884"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/video_pager"
         android:layout_height="match_parent"

@@ -1,16 +1,15 @@
 package com.flipkart.newsapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.flipkart.newsapp.R;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by amit.rs on 18/05/15.
  */
-public class VideoMediaPlayerPagerAdapter extends PagerAdapter implements View.OnAttachStateChangeListener{
+public class VideoMediaPlayerPagerAdapter extends PagerAdapter{
 
     private Context mContext;
     private int numberOfPages;
@@ -30,6 +29,7 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter implements View.O
     private int totalRenderedPages = 3;
     private LayoutInflater inflater;
     private int lastPageCreatedIndex;
+    int currentPosition;
 
 
     public VideoMediaPlayerPagerAdapter(Context context , int numberOfPages, ArrayList<VideosItem> video_list) {
@@ -54,6 +54,7 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter implements View.O
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
 
+        setCurrentPosition(position);
         View view = pages[position % totalRenderedPages];
         Holder mHolder = null;
 
@@ -71,44 +72,32 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter implements View.O
 
             mHolder.progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-            mHolder.shareButton = (Button) view.findViewById(R.id.share_button);
 
 
             mHolder.webview.getSettings().setJavaScriptEnabled(true);
+            mHolder.webview.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
 
             mHolder.webview.setWebViewClient(new WebViewClient() {
-
 
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     super.onPageStarted(view, url, favicon);
-                   // ((View)view.getTag()).setVisibility(View.VISIBLE);
+                    Log.d("debug","I am into");
+                    //((View)view.getTag()).setVisibility(View.GONE);
+
 
                 }
-
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
+                    Log.d("debug","I am into");
 
                    // ((View)view.getTag()).setVisibility(View.GONE);
                 }
             });
 
-            mHolder.shareButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //raising a share intent
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.setType("text/plain");
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, video_list.get(position).getTitle().toString());
-                    shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, video_list.get(position).getDescription().toString());
-                    mContext.startActivity(shareIntent);
-                }
-            });
 
 
             view.setTag(mHolder);
-
 
         }
         else
@@ -153,6 +142,14 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter implements View.O
 
     }
 
+    public int getCurrentPosition() {
+        return currentPosition ;
+    }
+
+    public void setCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
+    }
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
 
@@ -167,21 +164,11 @@ public class VideoMediaPlayerPagerAdapter extends PagerAdapter implements View.O
 //        webView = null;
     }
 
-    @Override
-    public void onViewAttachedToWindow(View v) {
-        Log.d("debug","Attach");
 
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(View v) {
-        Log.d("debug","Detach");
-
-    }
 
     class Holder{
         WebView webview;
-        Button shareButton;
+
         ProgressBar progressBar;
     }
 

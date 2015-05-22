@@ -3,15 +3,15 @@
 <RelativeLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal">
 
-    <Button android:id="@+id/share_button"
+
+    <RelativeLayout android:id="@+id/webViewLayout"
+
+        android:layout_marginBottom="50dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Share"/>
-
-
-
+        android:layout_height="match_parent">
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
@@ -21,17 +21,19 @@
     <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/web_view"
     android:layout_width="match_parent"
-    android:layout_height="350dp"
-    android:layout_margin="10dp"
-    android:layout_below="@id/share_button"
+    android:layout_height="match_parent"
 
-     />
+
+
+/>
+        </RelativeLayout>
 
     <com.flipkart.newsapp.views.CommentButton
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/web_view">
-    </com.flipkart.newsapp.views.CommentButton>
+       android:layout_alignParentBottom="true"
+        android:gravity="bottom"></com.flipkart.newsapp.views.CommentButton>
+
 
 </RelativeLayout>
 
