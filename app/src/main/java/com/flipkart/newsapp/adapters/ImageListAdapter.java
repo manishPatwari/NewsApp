@@ -73,24 +73,26 @@ public class ImageListAdapter extends BaseAdapter implements BaseNewsAdapterUpda
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             rowView = inflater.inflate(R.layout.image_list_item, viewGroup, false);
             imageListViewHolder =  new ImageListViewHolder();
-            TextView textView = (TextView) rowView.findViewById(R.id.title_view);
-            NetworkImageView networkImageView = (NetworkImageView) rowView.findViewById(R.id.thumbnail_img);
-            imageListViewHolder.imageTitleView = textView;
+//            TextView textView = (TextView) rowView.findViewById(R.id.title_view);
+            NetworkImageView networkImageView = (NetworkImageView) rowView.findViewById(R.id.image_1);
+//            imageListViewHolder.imageTitleView = textView;
             imageListViewHolder.networkImageView  = networkImageView;
             rowView.setTag(imageListViewHolder);
         }
         else{
             imageListViewHolder = (ImageListViewHolder) rowView.getTag();
         }
-        if (i % 2 == 0) {
+        /*if (i % 2 == 0) {
 //                rowView.setBackgroundColor(Color.rgb(200, 231, 230));
             rowView.setBackgroundColor(Color.rgb(220, 220, 220));
         } else {
 //                rowView.setBackgroundColor(Color.rgb(210, 220, 250));
             rowView.setBackgroundColor(Color.rgb(230, 230, 230));
-        }
+        }*/
 //            rowView.setBackgroundColor(Color.BLUE);
 
+//        rowView.setBackgroundColor(Color.rgb(230, 230, 230));
+        rowView.setBackgroundColor(Color.rgb(220, 220, 220));
 
 
         if (mFlickrResponse != null && mFlickrResponse.mFlickrPhoto != null) {
@@ -100,12 +102,11 @@ public class ImageListAdapter extends BaseAdapter implements BaseNewsAdapterUpda
 
             Log.d(TAG, imageUrl);
             imageListViewHolder.networkImageView.setImageUrl(imageUrl, mImageLoader);
-            imageListViewHolder.imageTitleView.setText(String.valueOf(jsonPhotoDataProvider.getTitle()));
+//            imageListViewHolder.imageTitleView.setText(String.valueOf(jsonPhotoDataProvider.getTitle()));
             HttpsTrustManager.allowAllSSL();
-
-            mImageLoader.get(imageUrl, ImageLoader.getImageListener(imageListViewHolder.networkImageView, R.drawable.loading_txt, R.drawable.error_ic));
+            mImageLoader.get(imageUrl, ImageLoader.getImageListener(imageListViewHolder.networkImageView, R.drawable.hourglass_icon, R.drawable.error_ic));
         } else {
-            imageListViewHolder.imageTitleView.setText("Some Error Occurred !");
+//            imageListViewHolder.imageTitleView.setText("Some Error Occurred !");
             imageListViewHolder.networkImageView.setErrorImageResId(R.drawable.error_ic);
         }
 
@@ -115,9 +116,9 @@ public class ImageListAdapter extends BaseAdapter implements BaseNewsAdapterUpda
         ListAnimationUtils listAnimationUtils = new ListAnimationUtils(mContext);
         Animation animation;
         if(position>lastPosition){
-            animation=listAnimationUtils.animateUpFromBottom();
+            animation=listAnimationUtils.animateFadeIn();
         }else{
-            animation=listAnimationUtils.animateDownFromTop();
+            animation=listAnimationUtils.animateFadeOut();
         }
 
         lastPosition = position;
@@ -126,6 +127,13 @@ public class ImageListAdapter extends BaseAdapter implements BaseNewsAdapterUpda
         animation.setDuration(430);
 //        lastPosition = position;
 //        animation = null;
+
+        /*ListAnimationUtils listAnimationUtils = new ListAnimationUtils(mContext);
+        Animation animation = listAnimationUtils.animatePushLeftIn();
+        view.startAnimation(animation);
+        animation.setDuration(430);
+*/
+
         return view;
     }
 

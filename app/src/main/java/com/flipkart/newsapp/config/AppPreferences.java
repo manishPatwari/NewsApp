@@ -17,7 +17,7 @@ public class AppPreferences {
 
     private static AppPreferences instance;
     private SharedPreferences sharedPreferences;
-    public static String FLICKR_API_URL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=5d96cc677f6446044c8bd880b943549b&per_page=30&format=json&nojsoncallback=1&safe_search=true";
+    public static String FLICKR_API_URL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=5d96cc677f6446044c8bd880b943549b&per_page=15&format=json&nojsoncallback=1&safe_search=true";
 
     private AppPreferences(){};
 

@@ -15,9 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.RequestQueue;
@@ -59,7 +59,8 @@ public class ImageFragment extends Fragment {
     private RequestQueue mRequestQueue;
     NetworkImageView mNetworkImageView;
     ImageLoader mImageLoader;
-    ListView mImageListView;
+    //    ListView mImageListView;
+    private GridView mGridView;
     private String mJsonResponse;
     FlickrResponse mFlickrRespons;
     private static String TAG = "FLICKR";
@@ -110,7 +111,8 @@ public class ImageFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_image, container, false);
         mActivity = getActivity();
-        mImageListView = (ListView) view.findViewById(R.id.list_fragment);
+//        mImageListView = (ListView) view.findViewById(R.id.list_fragment);
+        mGridView = (GridView)  view.findViewById(R.id.grid_view_fragment);
         mContext = mActivity.getApplicationContext();
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
@@ -127,13 +129,13 @@ public class ImageFragment extends Fragment {
         });
         mGsonBuilderHelper = new GSONBuilderHelper();
         FLICKR_API_URL = AppPreferences.FLICKR_API_URL;
-        loadImageFeed(FLICKR_API_URL + "&text=car");
+        loadImageFeed(FLICKR_API_URL + "&text=nature");
 
-        mImageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Toast.makeText(mContext, "You selected : " + (i + 1) + " item", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "You selected : " + (i + 1) + " item", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, GalleryActivity.class);
                 intent.putExtra("ListItemPosition", i);
                 intent.putExtra("TotalNumberOfItems", totalNumberOfItems);
@@ -173,7 +175,7 @@ public class ImageFragment extends Fragment {
             @Override
             public void onVolleyErrorResponse(VolleyError volleyError) {
                 Log.d(TAG, "Error Occurred :" + volleyError);
-                Cache.Entry entry = mRequestQueue.getCache().get(apiUrl);
+             /*   Cache.Entry entry = mRequestQueue.getCache().get(apiUrl);
                 if (entry != null) {
                     try {
                         String data = new String(entry.data, "UTF-8");
@@ -189,7 +191,7 @@ public class ImageFragment extends Fragment {
                     }
                 } else {
                     Log.d(TAG, "Cache Data is NULL");
-                }
+                }*/
 
             }
         });
@@ -243,8 +245,8 @@ public class ImageFragment extends Fragment {
         Log.d(TAG, "Init ListView Adapter...");
         mImageListAdapter = new ImageListAdapter(context, mFlickrRespons);
         mImageResponse.registerUpdateDataSourceListener(mImageListAdapter);
-        mImageListView.setAdapter(mImageListAdapter);
-        mImageListView.setOnScrollListener(new EndlessListScrollListener() {
+        mGridView.setAdapter(mImageListAdapter);
+        mGridView.setOnScrollListener(new EndlessListScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 Log.d(TAG, "Loading more data... page = " + page);
@@ -252,7 +254,7 @@ public class ImageFragment extends Fragment {
                 this.isLoading = false;
             }
         });
-        totalNumberOfItems = mImageListView.getCount();
+        totalNumberOfItems = mGridView.getCount();
 
         mActivity.runOnUiThread(new Runnable() {
             @Override
@@ -282,9 +284,9 @@ public class ImageFragment extends Fragment {
 //                Log.d(TAG, "For page  = "+ 2+" Response is :"+flickrResponse + "");
 //                initListViewAdapter(mContext);
 //                mImageListAdapter.notifyDataSetChanged();
-                mSwipeRefreshLayout.setRefreshing(false);
+//                mSwipeRefreshLayout.setRefreshing(false);
 
-                mSwipeRefreshLayout.setEnabled(false);
+//                mSwipeRefreshLayout.setEnabled(false);
 
             }
 

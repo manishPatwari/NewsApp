@@ -52,4 +52,8 @@ public class ListAnimationUtils {
         return animation;
     }
 
+    public Animation animateFadeOut() {
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
+        return animation;
+    }
 }

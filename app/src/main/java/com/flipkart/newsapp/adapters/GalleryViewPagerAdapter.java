@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -89,9 +88,9 @@ public class GalleryViewPagerAdapter extends PagerAdapter implements BaseNewsAda
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext,
+                /*Toast.makeText(mContext,
                         "Page " + position + " clicked",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
 //                ((Activity)mContext).getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 //                showDialog(flickrResponse, mImageLoader, position);
@@ -183,7 +182,9 @@ public class GalleryViewPagerAdapter extends PagerAdapter implements BaseNewsAda
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((RelativeLayout) object);
+        View view = (RelativeLayout) object;
+        container.removeView(view);
+        view = null;
     }
 
     @Override
