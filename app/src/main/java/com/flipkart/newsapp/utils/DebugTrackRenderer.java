@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.MediaCodecTrackRenderer;
 import com.google.android.exoplayer.TrackRenderer;
-import com.google.android.exoplayer.chunk.Format;
 
 /**
  * A {@link com.google.android.exoplayer.TrackRenderer} that periodically updates debugging information displayed by a
@@ -77,13 +76,16 @@ import com.google.android.exoplayer.chunk.Format;
   }
 
   private String getRenderString() {
-    return getQualityString() + " " + renderer.codecCounters.getDebugString();
+      return getQualityString();
+   // return getQualityString() + " " + renderer.codecCounters.getDebugString();
   }
 
   private String getQualityString() {
-    Format format = player.getVideoFormat();
-    return format == null ? "id:? br:? h:?"
-        : "id:" + format.id + " br:" + format.bitrate + " h:" + format.height;
+   // Format format = player.getVideoFormat();
+   // return format == null ? "id:? br:? h:? time:"+player.getCurrentPosition()
+      //  : "id:" + format.id + " br:" + format.bitrate + " h:" + format.height + "time"+player.getCurrentPosition();
+
+      return  "Time elapsed: " + Long.toString(player.getCurrentPosition());
   }
 
   @Override
