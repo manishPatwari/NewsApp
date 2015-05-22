@@ -17,16 +17,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"></WebView>
 
-        <ProgressBar
-            android:id="@+id/articleProgressBar"
-            style="?indeterminateProgressStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:visibility="invisible" />
-    </RelativeLayout>
+       <ProgressBar
+           android:id="@+id/articleProgressBar"
+           style="?android:attr/progressBarStyleHorizontal"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:indeterminate="true"
+           android:max="100"
+           android:minHeight="25dp"
+           android:minWidth="200dp"
+           android:progress="1"
+           android:visibility="invisible"
+           android:layout_alignParentTop="true"
+           android:layout_marginTop="-10dp"
+           android:layout_centerHorizontal="true" />
+
+   </RelativeLayout>
 
     <!--<ImageView
         android:id="@+id/comment_view"
