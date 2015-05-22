@@ -58,7 +58,7 @@ public class ArticleNetworkRequest{
                             articleNewsController.updateResponse(response);
 
                             articleFragment.setResponseInAdapter(false);
-                            articleFragment.getArticleNewsAdapter().notifyDataSetChanged();
+                           // articleFragment.getArticleNewsAdapter().notifyDataSetChanged();
                            // articleNewsAdapter.notifyDataSetChanged();
                         }
                     }
