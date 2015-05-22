@@ -52,12 +52,12 @@ public class ArticleNetworkRequest{
                        // ArticleNewsController articleNewsController=new ArticleNewsController();
                         if(appendDataOnScroll==false) {
                             articleNewsController.processResponse(response);
-                            articleFragment.setResponseInAdapter();
+                            articleFragment.setResponseInAdapter(true);
                         }
                         else{
                             articleNewsController.updateResponse(response);
 
-                            articleFragment.setResponseInAdapter();
+                            articleFragment.setResponseInAdapter(false);
                             articleFragment.getArticleNewsAdapter().notifyDataSetChanged();
                            // articleNewsAdapter.notifyDataSetChanged();
                         }
