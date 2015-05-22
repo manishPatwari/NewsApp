@@ -97,6 +97,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback,
     private TextView debugTextView;
     private TextView playerStateTextView;
     private SubtitleView subtitleView;
+
     private Button videoButton;
     private Button audioButton;
     private Button textButton;
@@ -200,6 +201,8 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback,
         }
         audioCapabilitiesReceiver.unregister();
         shutterView.setVisibility(View.VISIBLE);
+
+
     }
 
     @Override
@@ -281,6 +284,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback,
         }
         player.setSurface(surfaceView.getHolder().getSurface());
         player.setPlayWhenReady(true);
+
     }
 
     private void releasePlayer() {
@@ -300,28 +304,36 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback,
         if (playbackState == ExoPlayer.STATE_ENDED) {
             showControls();
         }
-        String text = "playWhenReady=" + playWhenReady + ", playbackState=";
+        //String text = "playWhenReady=" + playWhenReady + ", playbackState=";
+        String text = "PAUSE = ON" ;
         switch(playbackState) {
             case ExoPlayer.STATE_BUFFERING:
-                text += "buffering";
+                //text += "buffering";
                 break;
             case ExoPlayer.STATE_ENDED:
-                text += "ended";
+               // text += "ended";
                 break;
             case ExoPlayer.STATE_IDLE:
-                text += "idle";
+                //text += "idle";
                 break;
             case ExoPlayer.STATE_PREPARING:
-                text += "preparing";
+                //text += "preparing";
                 break;
             case ExoPlayer.STATE_READY:
-                text += "ready";
+                //text += "ready";
                 break;
             default:
                 text += "unknown";
                 break;
         }
-        playerStateTextView.setText(text);
+
+        if(!playWhenReady){
+            playerStateTextView.setText(text);
+            playerStateTextView.setVisibility(View.VISIBLE);
+        }
+        else
+        playerStateTextView.setVisibility(View.INVISIBLE);
+
         updateButtonVisibilities();
     }
 
@@ -504,7 +516,9 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback,
                 Log.i(TAG, String.format("ID3 TimedMetadata %s", entry.getKey()));
             }
         }
+
     }
+
 
     // SurfaceHolder.Callback implementation
 
