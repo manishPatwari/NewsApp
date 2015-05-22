@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.flipkart.newsapp.PlayerActivity;
 import com.flipkart.newsapp.R;
@@ -59,7 +58,7 @@ public class VideoFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Toast.makeText(getActivity().getApplicationContext(), "You selected : " + (position + 1) + " item", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity().getApplicationContext(), "You selected : " + (position + 1) + " item", Toast.LENGTH_SHORT).show();
 
                 Intent mpdIntent = new Intent(getActivity().getApplicationContext(), VideoGalleryActivity.class)
                         .setData(Uri.parse(""))
