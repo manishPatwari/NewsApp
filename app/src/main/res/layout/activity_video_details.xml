@@ -20,6 +20,7 @@
   <com.google.android.exoplayer.VideoSurfaceView android:id="@+id/surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:layout_gravity="center"/>
 
 
@@ -49,29 +50,35 @@
             android:layout_height="wrap_content"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:textSize="10sp"
-            tools:ignore="SmallSp"/>
+            android:textSize="12sp"
+            tools:ignore="SmallSp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:visibility="gone"/>
         <TextView android:id="@+id/debug_sample_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:textSize="10sp"
-            tools:ignore="SmallSp"/>
+            android:textSize="15sp"
+            tools:ignore="SmallSp"
+            android:visibility="gone"/>
 
         <TextView android:id="@+id/debug_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:textSize="10sp"
-            tools:ignore="SmallSp"/>
+            android:textSize="12sp"
+            tools:ignore="SmallSp"
+            android:layout_marginLeft="5dp"
+            />
 
         <LinearLayout android:id="@+id/controls_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone"
+
             android:padding="10dp">
 
             <Button android:id="@+id/video_controls"
